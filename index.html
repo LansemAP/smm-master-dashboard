@@ -1,0 +1,354 @@
+now <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Social Media Management Dashboard</title>
+    <meta name="description" content="Centralized social media dashboard for Corely, Suriosity, and Lansem. Tracks analytics, scheduled calendar posts, voice guidelines, and secure account credentials.">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-master">
+
+    <div class="app-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-square-share-nodes" style="color: #fff; font-size: 1.25rem;"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>SMM Master</h1>
+                    <span>Multi-Brand Console</span>
+                </div>
+            </div>
+
+            <!-- Brands Selector -->
+            <nav class="brands-menu">
+                <span class="section-label">Active Brands</span>
+                <button class="brand-btn active" data-brand="master">
+                    <i class="fa-solid fa-globe"></i> Unified Master
+                </button>
+                <button class="brand-btn" data-brand="corely">
+                    <i class="fa-solid fa-shirt"></i> Corely Luxury
+                </button>
+                <button class="brand-btn" data-brand="suriosity">
+                    <i class="fa-solid fa-wheat-awn"></i> Suriosity Agri
+                </button>
+                <button class="brand-btn" data-brand="lansem">
+                    <i class="fa-solid fa-briefcase"></i> Lansem UK
+                </button>
+            </nav>
+
+            <!-- Feature Navigation Links -->
+            <nav class="nav-menu">
+                <span class="section-label">Management</span>
+                <div class="nav-link active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </div>
+                <div class="nav-link" data-tab="accounts">
+                    <i class="fa-solid fa-network-wired"></i> Social Accounts
+                </div>
+                <div class="nav-link" data-tab="scheduler">
+                    <i class="fa-solid fa-calendar-days"></i> Content Calendar
+                </div>
+                <div class="nav-link" data-tab="guidelines">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Voice & Templates
+                </div>
+            </nav>
+
+            <!-- Sidebar User Info Footer -->
+            <div class="sidebar-footer">
+                <div class="user-avatar">AD</div>
+                <div class="user-info">
+                    <h4>Arnab Dutta</h4>
+                    <p>Global Account Owner</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Viewport -->
+        <main class="main-content">
+            
+            <!-- Top Action Header -->
+            <header class="top-header">
+                <div class="breadcrumb">
+                    <p id="brand-name-display">MASTER VIEW</p>
+                    <h2 id="header-title">Unified Social Hub</h2>
+                    <p id="header-sub">Master Control for Corely, Suriosity, and Lansem</p>
+                </div>
+                <div class="header-actions">
+                    <div class="sync-status">
+                        <span class="pulse-dot"></span>
+                        <span>API Status: Live</span>
+                    </div>
+                    <button class="btn-primary" id="quick-add-post-btn">
+                        <i class="fa-solid fa-plus"></i> New Post
+                    </button>
+                </div>
+            </header>
+
+            <!-- Tab 1: Dashboard Overview View -->
+            <section id="dashboard-view" class="view-section active">
+                
+                <!-- KPI Analytics grid -->
+                <div class="kpi-grid">
+                    <div class="kpi-card glass-panel">
+                        <div>
+                            <span class="kpi-title">Followers (Aggregated)</span>
+                            <h3 class="kpi-value" id="kpi-followers-val">303.8K</h3>
+                            <div class="kpi-change up">
+                                <i class="fa-solid fa-arrow-trend-up" id="kpi-followers-change-icon"></i>
+                                <span id="kpi-followers-change">+12.4%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glass-panel">
+                        <div>
+                            <span class="kpi-title">Monthly Reach</span>
+                            <h3 class="kpi-value" id="kpi-reach-val">1.2M</h3>
+                            <div class="kpi-change up">
+                                <i class="fa-solid fa-arrow-trend-up" id="kpi-reach-change-icon"></i>
+                                <span id="kpi-reach-change">+8.2%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glass-panel">
+                        <div>
+                            <span class="kpi-title">Engagement Rate</span>
+                            <h3 class="kpi-value" id="kpi-engagement-val">4.9%</h3>
+                            <div class="kpi-change up">
+                                <i class="fa-solid fa-arrow-trend-up" id="kpi-engagement-change-icon"></i>
+                                <span id="kpi-engagement-change">+0.5%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card glass-panel">
+                        <div>
+                            <span class="kpi-title">Scheduled Posts</span>
+                            <h3 class="kpi-value" id="kpi-scheduled-val">6</h3>
+                            <div class="kpi-change up" style="color: var(--accent);">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Active queue</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard charts and timeline feed -->
+                <div class="dashboard-layout">
+                    
+                    <!-- Analytics Follower Growth Trend -->
+                    <div class="chart-panel glass-panel">
+                        <div class="panel-header">
+                            <h3>Audience Growth (Last 30 Days)</h3>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Updated: Real-time</span>
+                        </div>
+                        <div class="chart-container">
+                            <svg id="growth-chart-svg" class="custom-chart-svg" viewBox="0 0 600 200">
+                                <defs>
+                                    <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.4"/>
+                                        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.0"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid Lines -->
+                                <line x1="20" y1="20" x2="580" y2="20" class="chart-grid-line"/>
+                                <line x1="20" y1="60" x2="580" y2="60" class="chart-grid-line"/>
+                                <line x1="20" y1="100" x2="580" y2="100" class="chart-grid-line"/>
+                                <line x1="20" y1="140" x2="580" y2="140" class="chart-grid-line"/>
+                                <line x1="20" y1="180" x2="580" y2="180" class="chart-grid-line"/>
+                                
+                                <!-- Dynamic elements will be drawn by JS: chart-area, chart-path, chart-dot -->
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Posts List Timeline -->
+                    <div class="feed-panel glass-panel">
+                        <div class="panel-header">
+                            <h3>Upcoming Queue</h3>
+                            <span style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Next 3 Posts</span>
+                        </div>
+                        <div class="post-feed-list" id="dashboard-feed-list">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Tab 2: Social Accounts Matrix View -->
+            <section id="accounts-view" class="view-section">
+                <div class="matrix-container" id="accounts-matrix-container">
+                    <!-- Populated dynamically by JS -->
+                </div>
+            </section>
+
+            <!-- Tab 3: Interactive Content Scheduler View -->
+            <section id="scheduler-view" class="view-section">
+                <div class="scheduler-layout">
+                    
+                    <!-- Calendar View Grid -->
+                    <div class="calendar-wrapper glass-panel">
+                        <div class="calendar-header">
+                            <h3 style="font-family: var(--font-heading); font-weight: 700;">June 2026</h3>
+                            <div class="calendar-nav">
+                                <button class="btn-secondary" style="padding: 6px 10px;"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button class="btn-secondary" style="padding: 6px 10px;"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <div class="calendar-grid">
+                            <span class="weekday-label">Mon</span>
+                            <span class="weekday-label">Tue</span>
+                            <span class="weekday-label">Wed</span>
+                            <span class="weekday-label">Thu</span>
+                            <span class="weekday-label">Fri</span>
+                            <span class="weekday-label">Sat</span>
+                            <span class="weekday-label">Sun</span>
+                        </div>
+                        <div class="calendar-grid" id="calendar-days-grid" style="margin-top: 8px;">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Post Creation Form -->
+                    <div class="creator-panel glass-panel">
+                        <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: 20px;">Schedule Post</h3>
+                        
+                        <form id="post-schedule-form">
+                            <div class="form-group">
+                                <label for="post-brand">Select Business</label>
+                                <select id="post-brand" class="form-control" style="background: rgba(0,0,0,0.3);">
+                                    <option value="corely">Corely Luxury</option>
+                                    <option value="suriosity">Suriosity Agri</option>
+                                    <option value="lansem">Lansem UK</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Target Channels</label>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="chk-li" value="linkedin" class="platform-checkbox" checked>
+                                    <label for="chk-li" class="platform-checkbox-label" style="--platform-color-rgb: 0,119,181;">
+                                        <i class="fa-brands fa-linkedin"></i> LinkedIn
+                                    </label>
+
+                                    <input type="checkbox" id="chk-ig" value="instagram" class="platform-checkbox">
+                                    <label for="chk-ig" class="platform-checkbox-label" style="--platform-color-rgb: 225,48,108;">
+                                        <i class="fa-brands fa-instagram"></i> Instagram
+                                    </label>
+
+                                    <input type="checkbox" id="chk-tw" value="twitter" class="platform-checkbox">
+                                    <label for="chk-tw" class="platform-checkbox-label" style="--platform-color-rgb: 29,161,242;">
+                                        <i class="fa-brands fa-x-twitter"></i> Twitter/X
+                                    </label>
+
+                                    <input type="checkbox" id="chk-pin" value="pinterest" class="platform-checkbox">
+                                    <label for="chk-pin" class="platform-checkbox-label" style="--platform-color-rgb: 189,8,28;">
+                                        <i class="fa-brands fa-pinterest"></i> Pinterest
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="post-content">Post Caption / Text</label>
+                                <textarea id="post-content" class="form-control" placeholder="Write your post content, links, hashtags..." required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="post-date">Schedule Date</label>
+                                <input type="date" id="post-date" class="form-control" value="2026-06-09" min="2026-06-01" max="2026-06-30" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="post-time">Schedule Time (GMT)</label>
+                                <input type="time" id="post-time" class="form-control" value="12:00" required>
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+                                <i class="fa-regular fa-paper-plane"></i> Schedule Post
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Tab 4: Guidelines View -->
+            <section id="guidelines-view" class="view-section">
+                <div class="guidelines-layout">
+                    <!-- Brand identity properties -->
+                    <div id="guidelines-identity-column">
+                        <!-- Dynamic guidelines card -->
+                    </div>
+
+                    <!-- Writing templates lists -->
+                    <div class="templates-panel glass-panel">
+                        <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: 24px;">Post Inspiration Templates</h3>
+                        <div class="templates-list" id="guidelines-templates-list">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Credentials Secure lookup modal popup -->
+    <div class="modal-overlay" id="credentials-modal">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h3 id="cred-brand-name">Business SMM Access</h3>
+                <button class="btn-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 8px;">
+                    This credential is encrypted. Ensure secure terminal practices are followed when managing company social identities.
+                </p>
+                <div class="credentials-table">
+                    <div class="cred-row">
+                        <span class="cred-label">Account Link</span>
+                        <span class="cred-val" id="cred-handle">@username</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-label">Login Email</span>
+                        <span class="cred-val" id="cred-email">admin@business.com</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-label">Temporary Access Pass</span>
+                        <span class="cred-val" id="cred-password" style="letter-spacing: 0.5px; font-weight: bold; color: var(--accent);">pass_value</span>
+                    </div>
+                </div>
+                <button class="btn-primary" style="justify-content: center; margin-top: 16px;" onclick="navigator.clipboard.writeText(document.getElementById('cred-password').textContent); alert('Password copied to clipboard!');">
+                    <i class="fa-solid fa-copy"></i> Copy Password
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script imports -->
+    <script src="app.js"></script>
+</body>
+</html>
