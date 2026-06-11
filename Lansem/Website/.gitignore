@@ -1,0 +1,12 @@
+# Ignore logs
+*.log
+browser.log
+
+# Ignore local server scripts or server variables if any
+# serve.ps1 (optional, keeping it in repository is fine for sharing, so let's keep it)
+
+# Node modules
+node_modules/
+package-lock.json
+
+.vercel

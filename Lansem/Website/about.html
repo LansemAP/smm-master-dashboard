@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        if (sessionStorage.getItem('preloaderShown') === 'true') {
+            document.write('<style>#preloader { display: none !important; } body.loading { overflow: visible !important; }</style>');
+        }
+        document.documentElement.classList.add('js-active');
+        setTimeout(function() {
+            if (!window.animationsInitialized) {
+                document.documentElement.classList.remove('js-active');
+                var preloader = document.getElementById('preloader');
+                if (preloader) preloader.style.display = 'none';
+                document.body.classList.remove('loading');
+                console.warn('Animations failed to initialize within timeout. Falling back to static layout.');
+            }
+        }, 8000);
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About LANSEM | Legal & Accounting Outsourcing Specialists</title>
+    <meta name="description" content="About LANSEM: Specialist Legal and Accounting support services that help growth-focused firms increase capacity, improve efficiency, and maintain profitability.">
+    <link rel="canonical" href="https://www.lansem.in/about.html">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css?v=1.0.9">
+</head>
+<body class="loading">
+
+    <!-- Premium Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <img src="assets/images/logo_white.png" alt="LANSEM Logo" class="preloader-logo">
+            <button id="preloaderEnterBtn" class="preloader-enter-btn">Enter Site</button>
+        </div>
+    </div>
+
+    <!-- Header / Sticky Navigation Bar -->
+    <header class="main-header" id="mainHeader">
+        <div class="header-container">
+            <a href="index.html" class="logo-area" id="logoLink">
+                <img id="logoImg" src="assets/images/logo_white.png" alt="LANSEM Logo">
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="accounting-services.html" class="nav-link">Accounting Services</a></li>
+                    <li><a href="legal-services.html" class="nav-link">Legal Services</a></li>
+                    <li><a href="about.html" class="nav-link active">About Us</a></li>
+                    <li><a href="security-compliance.html" class="nav-link">Security & Compliance</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                    <li class="mobile-cta"><a href="mailto:contact@lansem.in" class="btn btn-primary" style="margin-top: 15px; width: 100%; text-align: center; justify-content: center;">Book a Free Consultation</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-cta">
+                <a href="mailto:contact@lansem.in" class="btn btn-primary">Book a Free Consultation</a>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        
+        <!-- About Hero Section -->
+        <section class="about-hero">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="about-hero-content">
+                    <span class="hero-tag" style="color: var(--gold-color);">Who We Are</span>
+                    <h1 class="about-hero-title">About LANSEM</h1>
+                    <p class="about-hero-subtitle">A specialist operational partner helping professional firms increase capacity, improve efficiency, and control costs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Intro Section -->
+        <section class="section-padding" id="about-intro">
+            <div class="container">
+                <div class="intro-grid">
+                    <div class="intro-content-left">
+                        <span class="section-tag">Overview</span>
+                        <h2 class="section-title">A Trusted Extension of Your Team</h2>
+                        <p class="intro-text">At LANSEM, we believe professional firms should be able to grow without being constrained by rising operational costs, talent shortages, or administrative burden.</p>
+                        <p class="intro-text">We provide specialist legal and accounting support services that help firms increase capacity, improve efficiency, and maintain profitability without compromising quality, confidentiality, or professional standards.</p>
+                        <p class="intro-text">Our role is simple: to become a trusted extension of your team, allowing your professionals to focus on the work that creates the greatest value for your clients and your business.</p>
+                    </div>
+                    
+                    <div class="intro-image-right">
+                        <div class="blob-background"></div>
+                        <div class="portrait-frame">
+                            <img src="assets/images/featured_meeting_discussion.png" alt="LANSEM Corporate Meeting">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why LANSEM Exists & Focus -->
+        <section class="section-padding specialist-focus-section" id="why-exists">
+            <div class="container">
+                <div class="intro-grid" style="align-items: flex-start;">
+                    <div>
+                        <span class="section-tag">Why We Exist</span>
+                        <h2 class="section-title" style="margin-bottom: 20px;">A More Sustainable Growth Model</h2>
+                        <p class="intro-text" style="font-size: 1.1rem; font-weight: 600; color: var(--primary-light);">Across the professional services sector, firms are facing the same challenge.</p>
+                        <p class="intro-text">Client expectations continue to rise. Regulatory requirements continue to grow. Competition continues to increase. Yet the traditional solution remains the same: hire more people.</p>
+                        <p class="intro-text">Recruitment is expensive. Retention is difficult. Operational costs continue to rise.</p>
+                        <p class="intro-text"><strong>We founded LANSEM to provide a more sustainable model.</strong></p>
+                        <p class="intro-text">By combining qualified professionals, structured processes, secure infrastructure, and a commitment to quality, we help firms access the support they need to scale effectively while maintaining complete control over client relationships and service delivery.</p>
+                        <p class="intro-text">Our clients gain additional capacity without the fixed costs and complexities associated with traditional expansion.</p>
+                    </div>
+                    
+                    <div>
+                        <span class="section-tag">A Specialist Focus</span>
+                        <h2 class="section-title" style="margin-bottom: 20px;">Exclusively Legal & Accounting</h2>
+                        <p class="intro-text">Unlike general outsourcing providers, LANSEM focuses exclusively on legal and accounting support services.</p>
+                        <p class="intro-text">This specialist approach allows us to understand the unique requirements of professional firms, including confidentiality obligations, compliance expectations, accuracy standards, and workflow requirements.</p>
+                        
+                        <div class="specialist-box">
+                            <h4 class="specialist-box-title">Our Operational Principle</h4>
+                            <p class="specialist-box-text">Deliver work that meets professional standards while creating measurable operational and financial value for our clients.</p>
+                            <div class="specialist-box-highlight">Value • Security • Focus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What We Help Achieve Section -->
+        <section class="section-padding" id="achievements">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Operational Impact</span>
+                    <h2 class="section-title">What We Help Firms Achieve</h2>
+                    <p class="section-desc">We work closely with partner practices to deliver measurable strategic outcomes.</p>
+                </div>
+                
+                <div class="trust-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Increase operational capacity without increasing fixed overheads
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Improve profitability and resource utilisation
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Reduce dependency on recruitment and hiring cycles
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Improve turnaround times and service delivery
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Free senior professionals to focus on clients and business growth
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Create scalable operating models that support long-term expansion
+                    </div>
+                </div>
+                
+                <div class="value-prop-summary">
+                    <p>Whether supporting legal teams, accountancy practices, or professional service organisations, our objective remains the same: helping firms do more with the resources they already have.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust, Security, & Accountability -->
+        <section class="section-padding" id="security-trust" style="background-color: var(--bg-light);">
+            <div class="container">
+                <div class="intro-grid">
+                    <div class="intro-image-right" style="order: -1;">
+                        <div class="portrait-frame" style="border-radius: var(--border-radius-md);">
+                            <img src="assets/images/faq_meeting_notes.png" alt="Security and Compliance Audit">
+                        </div>
+                    </div>
+                    
+                    <div class="intro-content-left">
+                        <span class="section-tag">Compliance & Governance</span>
+                        <h2 class="section-title">Built on Trust, Security, and Accountability</h2>
+                        <p class="intro-text">Professional firms entrust us with important work. That responsibility is something we take seriously.</p>
+                        <p class="intro-text">Every process within LANSEM is designed around confidentiality, accuracy, and accountability. From onboarding and document handling to quality assurance and data protection, we operate within structured frameworks designed to meet the expectations of modern professional firms.</p>
+                        <p class="intro-text">We understand that trust is earned through consistency, reliability, and transparency. That philosophy guides every client relationship we build.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision & Mission Cards -->
+        <section class="section-padding vision-mission-section" id="vision-mission">
+            <div class="container">
+                <div class="vision-mission-grid">
+                    <!-- Vision Card -->
+                    <div class="vision-mission-card">
+                        <span class="card-badge">Our Vision</span>
+                        <h3>To Lead with Trust</h3>
+                        <p>To become the world's most trusted legal and accounting support partner for professional firms.</p>
+                        <p>We envision a future where firms can scale efficiently, remain competitive, and deliver exceptional client service without being constrained by traditional operational limitations.</p>
+                    </div>
+                    
+                    <!-- Mission Card -->
+                    <div class="vision-mission-card">
+                        <span class="card-badge">Our Mission</span>
+                        <h3>To Empower Growth</h3>
+                        <p>To help professional firms increase capacity, improve efficiency, and strengthen profitability through reliable, secure, and high-quality legal and accounting support services.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Values Section -->
+        <section class="section-padding values-section" id="values">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Our Culture</span>
+                    <h2 class="section-title">Our Core Values</h2>
+                    <p class="section-desc">The principles that guide our work, our relationships, and our delivery every day.</p>
+                </div>
+                
+                <div class="values-grid">
+                    <!-- Card 1 -->
+                    <div class="value-card">
+                        <div class="value-icon-box">E</div>
+                        <h4>Excellence</h4>
+                        <p>We are committed to delivering work that consistently meets professional standards.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="value-card">
+                        <div class="value-icon-box">I</div>
+                        <h4>Integrity</h4>
+                        <p>We operate with honesty, transparency, and accountability in every interaction.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="value-card">
+                        <div class="value-icon-box">C</div>
+                        <h4>Confidentiality</h4>
+                        <p>Protecting client information is fundamental to everything we do.</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="value-card">
+                        <div class="value-icon-box">P</div>
+                        <h4>Partnership</h4>
+                        <p>We measure our success by the long-term success of the firms we support.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Looking for a Smarter Way to Scale Section -->
+        <section class="about-cta-section" id="about-cta">
+            <div class="container">
+                <div class="about-cta-content">
+                    <h2 class="about-cta-title">Looking for a Smarter Way to Scale?</h2>
+                    <p class="about-cta-desc">Whether your goal is reducing operational costs, improving efficiency, increasing capacity, or supporting growth, LANSEM provides the expertise and support infrastructure to help your firm move forward with confidence.</p>
+                    <a href="index.html#contact" class="btn btn-primary" style="background-color: var(--gold-color); color: var(--primary-color);">Let's Start a Conversation</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-logo-area">
+                    <img src="assets/images/logo_white.png" alt="LANSEM Logo">
+                    <p class="footer-desc">LANSEM delivers high-skill legal and accounting outsourcing for professional practices. Back-office support managed by experienced specialists.</p>
+                    <span class="footer-compliance-tag">Accurate • Compliant • Reliable • Global</span>
+                </div>
+                
+                <div class="footer-links-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links-list">
+                        <li><a class="footer-link-item" href="index.html#">Home</a></li>
+                        <li><a class="footer-link-item" href="accounting-services.html">Accounting Services</a></li>
+                        <li><a class="footer-link-item" href="legal-services.html">Legal Services</a></li>
+                        <li><a class="footer-link-item" href="about.html">About Us</a></li>
+                        <li><a class="footer-link-item" href="security-compliance.html">Security & Compliance</a></li>
+                        <li><a class="footer-link-item" href="index.html#faq">Frequently Asked Questions</a></li>
+                        <li><a class="footer-link-item" href="index.html#contact">Contact Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact-col">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-list">
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <span><a href="mailto:contact@lansem.in">contact@lansem.in</a></span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <span><a href="mailto:contact@lansem.in">contact@lansem.in</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Data Processing Agreement</a>
+                </div>
+                
+                <div class="footer-disclaimer">
+                    <strong>Disclaimer:</strong> LANSEM is not a law firm or registered audit practice and does not provide direct legal, financial, or audit advice. All work products, prep files, tax returns, and research are provided as back-office services strictly for review and sign-off by qualified solicitors or licensed practitioners representing our client firms.
+                </div>
+                
+                <div class="footer-copyright">
+                    &copy; 2026 LANSEM Legal and Accounting Advisors. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Consultation Widget -->
+    <div id="consultationWidget" class="floating-widget hidden">
+        <button id="closeWidgetBtn" class="close-widget-btn" aria-label="Dismiss">&times;</button>
+        <div class="widget-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        </div>
+        <div class="widget-content">
+            <h4>Start Your 15-Hour Free Pilot</h4>
+            <p>Expand your UK accounting capacity overnight. Discuss your requirements today.</p>
+            <a href="index.html#contact" id="widgetCTA" class="btn btn-primary btn-sm">Book Free Consultation</a>
+        </div>
+    </div>
+
+    <!-- GSAP Animations Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Custom Scripts -->
+    <script src="js/animations.js?v=1.0.8"></script>
+    <script src="js/main.js?v=1.0.1"></script>
+</body>
+</html>

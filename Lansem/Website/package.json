@@ -1,0 +1,9 @@
+{
+  "name": "lansem-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lansem - Legal & Accounting Advisors corporate website.",
+  "scripts": {
+    "dev": "npx http-server -p 3000"
+  }
+}

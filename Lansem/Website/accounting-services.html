@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        if (sessionStorage.getItem('preloaderShown') === 'true') {
+            document.write('<style>#preloader { display: none !important; } body.loading { overflow: visible !important; }</style>');
+        }
+        document.documentElement.classList.add('js-active');
+        setTimeout(function() {
+            if (!window.animationsInitialized) {
+                document.documentElement.classList.remove('js-active');
+                var preloader = document.getElementById('preloader');
+                if (preloader) preloader.style.display = 'none';
+                document.body.classList.remove('loading');
+                console.warn('Animations failed to initialize within timeout. Falling back to static layout.');
+            }
+        }, 8000);
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting Outsourcing for UK USA UAE Practices | LANSEM</title>
+    <meta name="description" content="Outsourced accounting support for UK, USA and UAE accountancy practices. Bookkeeping, accounts preparation, tax support and compliance by qualified CAs and ACCAs. Start with a free 2-week pilot.">
+    <link rel="canonical" href="https://www.lansem.in/accounting-services.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.lansem.in/accounting-services.html">
+    <meta property="og:title" content="Accounting Outsourcing for UK USA UAE Practices | LANSEM">
+    <meta property="og:description" content="Outsourced accounting support for UK, USA and UAE accountancy practices. Bookkeeping, accounts preparation, tax support and compliance by qualified CAs and ACCAs. Free 2-week pilot.">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css?v=1.0.9">
+</head>
+<body class="loading">
+
+    <!-- Premium Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <img src="assets/images/logo_white.png" alt="LANSEM Logo" class="preloader-logo">
+            <button id="preloaderEnterBtn" class="preloader-enter-btn">Enter Site</button>
+        </div>
+    </div>
+
+    <!-- Header / Sticky Navigation Bar -->
+    <header class="main-header" id="mainHeader">
+        <div class="header-container">
+            <a href="index.html" class="logo-area" id="logoLink">
+                <img id="logoImg" src="assets/images/logo_white.png" alt="LANSEM Logo">
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="accounting-services.html" class="nav-link active">Accounting Services</a></li>
+                    <li><a href="legal-services.html" class="nav-link">Legal Services</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="security-compliance.html" class="nav-link">Security & Compliance</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                    <li class="mobile-cta"><a href="mailto:contact@lansem.in" class="btn btn-primary" style="margin-top: 15px; width: 100%; text-align: center; justify-content: center;">Book a Free Consultation</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-cta">
+                <a href="mailto:contact@lansem.in" class="btn btn-primary">Book a Free Consultation</a>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        
+        <!-- Accounting Hero Section -->
+        <section class="accounting-hero">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="accounting-hero-content">
+                    <span class="hero-tag" style="color: var(--gold-color);">Specialist Division</span>
+                    <h1 class="accounting-hero-title">Accounting Support Services</h1>
+                    <p class="accounting-hero-subtitle">More Capacity. Greater Efficiency. Stronger Margins.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accounting Intro Section -->
+        <section class="section-padding" id="accounting-intro">
+            <div class="container">
+                <div class="intro-grid">
+                    <div class="intro-content-left">
+                        <span class="section-tag">Overview</span>
+                        <h2 class="section-title">Support for Growth-Focused Accounting Practices</h2>
+                        <p class="intro-text">Accounting firms continue to face increasing compliance workloads, talent shortages, and growing client expectations.</p>
+                        <p class="intro-text">LANSEM helps firms manage these challenges by providing specialist accounting support professionals who integrate into existing workflows and assist with time-intensive operational tasks.</p>
+                        <p class="intro-text">The result is improved efficiency, greater scalability, and better utilisation of your qualified accountants and advisors.</p>
+                    </div>
+                    
+                    <div class="intro-image-right">
+                        <div class="blob-background"></div>
+                        <div class="portrait-frame">
+                            <img src="assets/images/featured_meeting_discussion.png" alt="LANSEM Accounting Support Advisors">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solutions Grid Section -->
+        <section class="section-padding" id="solutions" style="background-color: var(--bg-light); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Our Services</span>
+                    <h2 class="section-title">Our Accounting Support Solutions</h2>
+                    <p class="section-desc">Reliable back-office operations and accounting services tailored to your practice standards.</p>
+                </div>
+                
+                <div class="legal-solutions-grid">
+                    <!-- Solution 1 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">BK</div>
+                        <h3>Bookkeeping</h3>
+                        <p>Accurate transaction recording, ledger maintenance, and financial data management.</p>
+                    </div>
+                    
+                    <!-- Solution 2 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">AP</div>
+                        <h3>Accounts Preparation</h3>
+                        <p>Preparation of financial statements, working papers, schedules, and supporting documentation.</p>
+                    </div>
+                    
+                    <!-- Solution 3 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">TX</div>
+                        <h3>Tax Support</h3>
+                        <p>Assistance with personal tax, corporate tax, partnership tax, and indirect tax preparation processes.</p>
+                    </div>
+                    
+                    <!-- Solution 4 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">BR</div>
+                        <h3>Bank Reconciliations</h3>
+                        <p>Accurate reconciliation of bank accounts and financial records.</p>
+                    </div>
+                    
+                    <!-- Solution 5 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">FR</div>
+                        <h3>Financial Reporting Support</h3>
+                        <p>Preparation of management accounts, financial summaries, and performance reports.</p>
+                    </div>
+                    
+                    <!-- Solution 6 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">PR</div>
+                        <h3>Payroll Support</h3>
+                        <p>Payroll processing assistance, reconciliations, and payroll reporting support.</p>
+                    </div>
+                    
+                    <!-- Solution 7 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">CO</div>
+                        <h3>Compliance Support</h3>
+                        <p>Supporting firms with recurring compliance and regulatory obligations.</p>
+                    </div>
+                    
+                    <!-- Solution 8 -->
+                    <div class="solution-card">
+                        <div class="solution-icon-box">BO</div>
+                        <h3>Back-Office Accounting Operations</h3>
+                        <p>Managing repetitive accounting processes that consume valuable internal resources.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UK-Specific Service Scope Section -->
+        <section class="section-padding" id="service-scope" style="background-color: var(--bg-white); border-bottom: 1px solid var(--border-color);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Service Scope</span>
+                    <h2 class="section-title">UK-Specific Accounting Services Scope</h2>
+                    <p class="section-desc">Understand exactly what tasks our specialists handle and where the line of regulatory responsibility is drawn.</p>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="scope-table">
+                        <thead>
+                            <tr>
+                                <th>Accounting Service</th>
+                                <th>Included?</th>
+                                <th>Operational Scope & Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Bank Feed Reconciliation</strong></td>
+                                <td><span class="status-badge included">Yes</span></td>
+                                <td>Daily matching of bank feed transactions in Xero, QuickBooks Online, or other ledger software.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Receipt Coding & Matching</strong></td>
+                                <td><span class="status-badge included">Yes</span></td>
+                                <td>Processing, coding, and receipt matching via automation tools like Dext or Hubdoc.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Payroll RTI Calculation</strong></td>
+                                <td><span class="status-badge included">Yes</span></td>
+                                <td>Processing payroll runs, RTI, FPS, EPS calculations, and drafting auto-enrolment pension sheets (BrightPay).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>VAT Return Preparation</strong></td>
+                                <td><span class="status-badge included">Yes</span></td>
+                                <td>MTD-compliant transactional compilation, bank-to-ledger checks, and draft preparation.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Management Accounts Drafts</strong></td>
+                                <td><span class="status-badge included">Yes</span></td>
+                                <td>Monthly/quarterly drafting of Profit & Loss (P&L), Balance Sheet, and ledger adjustments.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>FRS 102 / 105 Accounts Drafts</strong></td>
+                                <td><span class="status-badge included">Yes</span></td>
+                                <td>Advanced prep sheets, working papers, and draft accounts prepared by CA/ACCA-level specialists.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CIS Scheme Returns</strong></td>
+                                <td><span class="status-badge included">Yes</span></td>
+                                <td>Compilation and calculation of Construction Industry Scheme deductions and subcontractor statements.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Company Formation & Tax Advice</strong></td>
+                                <td><span class="status-badge excluded">No</span></td>
+                                <td>General tax consulting, corporate structure advice, and UK company formation (requires separate authorization).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>HMRC Tax Submissions</strong></td>
+                                <td><span class="status-badge excluded">No</span></td>
+                                <td>Direct electronic filing or submission of VAT, CIS, or Corporate Tax returns to HMRC.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Audit Work & Sign-off</strong></td>
+                                <td><span class="status-badge excluded">No</span></td>
+                                <td>Registered statutory audit procedures or audit opinions (requires UK registered auditor status).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="exclusions-note-box">
+                    <h5>⚠️ Important Regulatory Boundary</h5>
+                    <p>LANSEM operates as a white-label back-office processor. We compile, reconcile, and draft reports for your client ledgers, but we <strong>never</strong> submit tax returns to HMRC or sign off audits. The final review, adjustments, and electronic submission responsibilities remain strictly with your UK firm's licensed practitioners.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Accounting Firms Choose Section -->
+        <section class="section-padding" id="why-partner">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Value Proposition</span>
+                    <h2 class="section-title">Why Accounting Firms Choose LANSEM</h2>
+                    <p class="section-desc">Strategic operational advantages designed to maximize profitability and flatline hiring overheads.</p>
+                </div>
+                
+                <div class="trust-grid">
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Reduce operating costs
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Improve staff utilisation
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Increase client servicing capacity
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Reduce administrative workload
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Support firm growth
+                    </div>
+                    <div class="trust-item">
+                        <span class="checkmark">✓</span> Improve profitability
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advisory Focus CTA Banner -->
+        <section class="section-padding commercial-advantage-section" id="advantage">
+            <div class="container">
+                <div class="commercial-advantage-content">
+                    <span class="section-tag" style="color: var(--gold-color);">Focus Your Team on Advisory Work</span>
+                    <h2 class="section-title" style="color: var(--bg-white); margin-bottom: 24px;">Ready to Scale More Efficiently?</h2>
+                    <p class="commercial-advantage-highlight">The highest value your firm delivers comes through expertise, advice, and client relationships.</p>
+                    <p class="intro-text" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 40px; max-width: 750px; margin-left: auto; margin-right: auto;">LANSEM helps remove the operational burden that prevents your professionals from focusing on those activities. Let's discuss how LANSEM can help your firm improve efficiency, increase capacity, and strengthen profitability.</p>
+                    <a href="index.html#contact" class="btn btn-primary" style="background-color: var(--gold-color); color: var(--primary-color);">Book a Consultation</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-logo-area">
+                    <img src="assets/images/logo_white.png" alt="LANSEM Logo">
+                    <p class="footer-desc">LANSEM delivers high-skill legal and accounting outsourcing for professional practices. Back-office support managed by experienced specialists.</p>
+                    <span class="footer-compliance-tag">Accurate • Compliant • Reliable • Global</span>
+                </div>
+                
+                <div class="footer-links-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links-list">
+                        <li><a class="footer-link-item" href="index.html#">Home</a></li>
+                        <li><a class="footer-link-item" href="accounting-services.html">Accounting Services</a></li>
+                        <li><a class="footer-link-item" href="legal-services.html">Legal Services</a></li>
+                        <li><a class="footer-link-item" href="about.html">About Us</a></li>
+                        <li><a class="footer-link-item" href="security-compliance.html">Security & Compliance</a></li>
+                        <li><a class="footer-link-item" href="index.html#faq">Frequently Asked Questions</a></li>
+                        <li><a class="footer-link-item" href="index.html#contact">Contact Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact-col">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-list">
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <span><a href="mailto:contact@lansem.in">contact@lansem.in</a></span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <span><a href="mailto:contact@lansem.in">contact@lansem.in</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Data Processing Agreement</a>
+                </div>
+                
+                <div class="footer-disclaimer">
+                    <strong>Disclaimer:</strong> LANSEM is not a law firm or registered audit practice and does not provide direct legal, financial, or audit advice. All work products, prep files, tax returns, and research are provided as back-office services strictly for review and sign-off by qualified solicitors or licensed practitioners representing our client firms.
+                </div>
+                
+                <div class="footer-copyright">
+                    &copy; 2026 LANSEM Legal and Accounting Advisors. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Consultation Widget -->
+    <div id="consultationWidget" class="floating-widget hidden">
+        <button id="closeWidgetBtn" class="close-widget-btn" aria-label="Dismiss">&times;</button>
+        <div class="widget-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        </div>
+        <div class="widget-content">
+            <h4>Start Your 15-Hour Free Pilot</h4>
+            <p>Expand your UK accounting capacity overnight. Discuss your requirements today.</p>
+            <a href="index.html#contact" id="widgetCTA" class="btn btn-primary btn-sm">Book Free Consultation</a>
+        </div>
+    </div>
+
+    <!-- GSAP Animations Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Custom Scripts -->
+    <script src="js/animations.js?v=1.0.8"></script>
+    <script src="js/main.js?v=1.0.1"></script>
+</body>
+</html>
