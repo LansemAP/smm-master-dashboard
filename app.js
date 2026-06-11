@@ -258,6 +258,18 @@ function setupEventListeners() {
         scheduleForm.addEventListener('submit', handleAddPost);
     }
 
+    // Post edit form submission
+    const editPostForm = document.getElementById('edit-post-form');
+    if (editPostForm) {
+        editPostForm.addEventListener('submit', handleEditPostSubmit);
+    }
+
+    // Post edit delete button action
+    const editPostDeleteBtn = document.getElementById('btn-edit-post-delete');
+    if (editPostDeleteBtn) {
+        editPostDeleteBtn.addEventListener('click', handleEditPostDelete);
+    }
+
     // Modal close buttons
     document.querySelectorAll('.btn-modal-close, .modal-overlay').forEach(element => {
         element.addEventListener('click', (e) => {
@@ -439,6 +451,8 @@ function renderDashboardView(brandData, posts) {
     limitPosts.forEach(post => {
         const card = document.createElement('div');
         card.className = 'post-feed-card';
+        card.style.cursor = 'pointer';
+        card.setAttribute('onclick', `openEditPostModal(${post.id})`);
         
         const platformsHtml = post.platforms.map(p => 
             `<i class="fa-brands fa-${p === 'twitter' ? 'x-twitter' : p} platform-icon ${p}"></i>`
@@ -456,7 +470,7 @@ function renderDashboardView(brandData, posts) {
             <p class="post-content-preview">${post.content}</p>
             <div class="post-card-footer">
                 <span class="post-time"><i class="fa-regular fa-clock"></i> ${formattedDate} at ${post.time}</span>
-                <button class="btn-icon-delete" onclick="deletePost(${post.id})">
+                <button class="btn-icon-delete" onclick="event.stopPropagation(); deletePost(${post.id})">
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             </div>
@@ -633,12 +647,10 @@ function renderSchedulerView(posts) {
             badge.innerHTML = `${platformIcon} <span style="margin-left: 2px;">${post.content}</span>`;
             badge.title = `${post.brand.toUpperCase()} [${post.platforms.join(', ')}] at ${post.time}: ${post.content}`;
             
-            // Allow deleting post by clicking on badge (with confirm)
+            // Allow editing post by clicking on badge
             badge.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if(confirm(`Are you sure you want to delete this scheduled post for ${post.brand.toUpperCase()}?`)) {
-                    deletePost(post.id);
-                }
+                openEditPostModal(post.id);
             });
 
             dayCard.appendChild(badge);
@@ -828,3 +840,81 @@ function closeAllModals() {
 
 // Expose deleting to window scope for onclick handlers
 window.deletePost = deletePost;
+
+// Open Edit Post modal
+window.openEditPostModal = function(postId) {
+    const modal = document.getElementById('edit-post-modal');
+    if (!modal) return;
+
+    const posts = getScheduledPosts();
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    // Populate data
+    document.getElementById('edit-post-id').value = post.id;
+    document.getElementById('edit-post-brand').value = post.brand;
+    document.getElementById('edit-post-content').value = post.content;
+    document.getElementById('edit-post-date').value = post.date;
+    document.getElementById('edit-post-time').value = post.time;
+
+    // Reset platform checkboxes
+    document.querySelectorAll('.edit-platform-checkbox').forEach(cb => {
+        cb.checked = post.platforms.includes(cb.value);
+    });
+
+    // Show modal
+    modal.classList.add('active');
+};
+
+// Handle edit post form submit
+function handleEditPostSubmit(e) {
+    e.preventDefault();
+
+    const id = parseInt(document.getElementById('edit-post-id').value);
+    const brand = document.getElementById('edit-post-brand').value;
+    const content = document.getElementById('edit-post-content').value.trim();
+    const date = document.getElementById('edit-post-date').value;
+    const time = document.getElementById('edit-post-time').value;
+
+    const platforms = [];
+    document.querySelectorAll('.edit-platform-checkbox:checked').forEach(cb => {
+        platforms.push(cb.value);
+    });
+
+    if (!content || !date || !time) {
+        alert('Please fill out the content caption, date, and time.');
+        return;
+    }
+
+    if (platforms.length === 0) {
+        alert('Please select at least one platform channel.');
+        return;
+    }
+
+    const posts = getScheduledPosts();
+    const postIndex = posts.findIndex(p => p.id === id);
+    if (postIndex === -1) {
+        alert('Post not found in database.');
+        return;
+    }
+
+    // Update fields
+    posts[postIndex].brand = brand;
+    posts[postIndex].content = content;
+    posts[postIndex].date = date;
+    posts[postIndex].time = time;
+    posts[postIndex].platforms = platforms;
+
+    saveScheduledPosts(posts);
+    closeAllModals();
+    renderAll();
+}
+
+// Handle edit delete click
+function handleEditPostDelete() {
+    const id = parseInt(document.getElementById('edit-post-id').value);
+    if (confirm("Are you sure you want to delete this scheduled post?")) {
+        deletePost(id);
+        closeAllModals();
+    }
+}
