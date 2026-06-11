@@ -81,7 +81,7 @@ Transparency isn't a goal; it's our standard.
             { id: 'c-ig', platform: 'instagram', rgb: '225, 48, 108', handle: '@corely.apparel', followers: '52.4K', engagement: '4.8%', manager: 'Neha S.', status: 'Active', login: 'social@corely.com' },
             { id: 'c-pin', platform: 'pinterest', rgb: '189, 8, 28', handle: '@corely_essential', followers: '112.0K', engagement: '2.1%', manager: 'Neha S.', status: 'Active', login: 'pinterest@corely.com' },
             { id: 'c-tt', platform: 'tiktok', rgb: '0, 242, 254', handle: '@corely.wear', followers: '84.0K', engagement: '12.0%', manager: 'Aarav M.', status: 'Active', login: 'tiktok@corely.com' },
-            { id: 'c-li', platform: 'linkedin', rgb: '0, 119, 181', handle: 'Corely Apparel', followers: '8.9K', engagement: '3.2%', manager: 'Arnab D.', status: 'Active', login: 'b2b@corely.com' }
+            { id: 'c-li', platform: 'linkedin', rgb: '0, 119, 181', handle: 'Corely Apparel', followers: '8.9K', engagement: '3.2%', manager: 'Arnab P.', status: 'Active', login: 'b2b@corely.com' }
         ]
     },
     suriosity: {
