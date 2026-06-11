@@ -55,7 +55,7 @@ now <!DOCTYPE html>
                     <i class="fa-solid fa-network-wired"></i> Social Accounts
                 </div>
                 <div class="nav-link" data-tab="scheduler">
-                    <i class="fa-solid fa-calendar-days"></i> Content Calendar
+                    <i class="fa-solid fa-layer-group"></i> Content Board
                 </div>
                 <div class="nav-link" data-tab="guidelines">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> Voice & Templates
@@ -209,32 +209,51 @@ now <!DOCTYPE html>
             <section id="scheduler-view" class="view-section">
                 <div class="scheduler-layout">
                     
-                    <!-- Calendar View Grid -->
-                    <div class="calendar-wrapper glass-panel">
-                        <div class="calendar-header">
-                            <h3 style="font-family: var(--font-heading); font-weight: 700;">June 2026</h3>
-                            <div class="calendar-nav">
-                                <button class="btn-secondary" style="padding: 6px 10px;"><i class="fa-solid fa-chevron-left"></i></button>
-                                <button class="btn-secondary" style="padding: 6px 10px;"><i class="fa-solid fa-chevron-right"></i></button>
+                    <!-- Content Board View -->
+                    <div class="calendar-wrapper glass-panel" style="grid-column: span 1; width: 100%; border: none; background: transparent; box-shadow: none; backdrop-filter: none; padding: 0;">
+                        <div class="calendar-header" style="margin-bottom: 20px; padding: 0 8px;">
+                            <h3 style="font-family: var(--font-heading); font-weight: 700; font-size: 1.25rem;">Ideation & SMM Workspace</h3>
+                        </div>
+                        <!-- Board Columns -->
+                        <div class="board-columns-wrapper">
+                            <div class="board-column" data-status="idea">
+                                <div class="column-header">
+                                    <span class="column-dot" style="background: #64748b;"></span>
+                                    <h4>Ideas / Drafts</h4>
+                                    <span class="column-count" id="count-idea">0</span>
+                                </div>
+                                <div class="column-cards-list" id="list-idea"></div>
                             </div>
-                        </div>
-                        <div class="calendar-grid">
-                            <span class="weekday-label">Mon</span>
-                            <span class="weekday-label">Tue</span>
-                            <span class="weekday-label">Wed</span>
-                            <span class="weekday-label">Thu</span>
-                            <span class="weekday-label">Fri</span>
-                            <span class="weekday-label">Sat</span>
-                            <span class="weekday-label">Sun</span>
-                        </div>
-                        <div class="calendar-grid" id="calendar-days-grid" style="margin-top: 8px;">
-                            <!-- Populated dynamically by JS -->
+                            <div class="board-column" data-status="to-edit">
+                                <div class="column-header">
+                                    <span class="column-dot" style="background: #fbbf24;"></span>
+                                    <h4>To Edit</h4>
+                                    <span class="column-count" id="count-to-edit">0</span>
+                                </div>
+                                <div class="column-cards-list" id="list-to-edit"></div>
+                            </div>
+                            <div class="board-column" data-status="to-view">
+                                <div class="column-header">
+                                    <span class="column-dot" style="background: #a855f7;"></span>
+                                    <h4>To View</h4>
+                                    <span class="column-count" id="count-to-view">0</span>
+                                </div>
+                                <div class="column-cards-list" id="list-to-view"></div>
+                            </div>
+                            <div class="board-column" data-status="posted">
+                                <div class="column-header">
+                                    <span class="column-dot" style="background: #10b981;"></span>
+                                    <h4>Posted</h4>
+                                    <span class="column-count" id="count-posted">0</span>
+                                </div>
+                                <div class="column-cards-list" id="list-posted"></div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Post Creation Form -->
                     <div class="creator-panel glass-panel">
-                        <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: 20px;">Schedule Post</h3>
+                        <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: 20px;">Create Post</h3>
                         
                         <form id="post-schedule-form">
                             <div class="form-group">
@@ -277,17 +296,17 @@ now <!DOCTYPE html>
                             </div>
 
                             <div class="form-group">
-                                <label for="post-date">Schedule Date</label>
-                                <input type="date" id="post-date" class="form-control" value="2026-06-09" min="2026-06-01" max="2026-06-30" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="post-time">Schedule Time (GMT)</label>
-                                <input type="time" id="post-time" class="form-control" value="12:00" required>
+                                <label for="post-status">Post Status</label>
+                                <select id="post-status" class="form-control" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
+                                    <option value="idea">Idea / Draft</option>
+                                    <option value="to-edit">To Edit</option>
+                                    <option value="to-view">To View / Approve</option>
+                                    <option value="posted">Posted</option>
+                                </select>
                             </div>
 
                             <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
-                                <i class="fa-regular fa-paper-plane"></i> Schedule Post
+                                <i class="fa-solid fa-plus"></i> Create Post
                             </button>
                         </form>
                     </div>
@@ -399,13 +418,13 @@ now <!DOCTYPE html>
                     </div>
 
                     <div class="form-group">
-                        <label for="edit-post-date">Schedule Date</label>
-                        <input type="date" id="edit-post-date" class="form-control" min="2026-06-01" max="2026-06-30" required style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit-post-time">Schedule Time (GMT)</label>
-                        <input type="time" id="edit-post-time" class="form-control" required style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
+                        <label for="edit-post-status">Post Status</label>
+                        <select id="edit-post-status" class="form-control" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
+                            <option value="idea">Idea / Draft</option>
+                            <option value="to-edit">To Edit</option>
+                            <option value="to-view">To View / Approve</option>
+                            <option value="posted">Posted</option>
+                        </select>
                     </div>
 
                     <div style="display: flex; gap: 12px; margin-top: 24px;">

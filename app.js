@@ -211,21 +211,21 @@ BRANDS_DB.master.accounts = [
 ];
 
 const DEFAULT_POSTS = [
-    { id: 7, brand: 'suriosity', platforms: ['linkedin'], content: 'Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits. Today, his harvest is bound for the EU. By setting up farm-gate digital checks near Jabalpur, we bypassed middlemen and paid Ramesh 45% higher rates directly. Sourcing directly is rural empowerment.', category: 'sourcing', date: '2026-06-14', time: '09:30' }
+    { id: 7, brand: 'suriosity', platforms: ['linkedin'], content: 'Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits. Today, his harvest is bound for the EU. By setting up farm-gate digital checks near Jabalpur, we bypassed middlemen and paid Ramesh 45% higher rates directly. Sourcing directly is rural empowerment.', category: 'sourcing', status: 'to-view' }
 ];
  
 // Local Storage Manager for Scheduled Posts
 function getScheduledPosts() {
-    const stored = localStorage.getItem('master_scheduled_posts_v2');
+    const stored = localStorage.getItem('master_scheduled_posts_v3');
     if (!stored) {
-        localStorage.setItem('master_scheduled_posts_v2', JSON.stringify(DEFAULT_POSTS));
+        localStorage.setItem('master_scheduled_posts_v3', JSON.stringify(DEFAULT_POSTS));
         return DEFAULT_POSTS;
     }
     return JSON.parse(stored);
 }
  
 function saveScheduledPosts(posts) {
-    localStorage.setItem('master_scheduled_posts_v2', JSON.stringify(posts));
+    localStorage.setItem('master_scheduled_posts_v3', JSON.stringify(posts));
 }
 
 // App Initialization
@@ -458,7 +458,7 @@ function renderDashboardView(brandData, posts) {
             `<i class="fa-brands fa-${p === 'twitter' ? 'x-twitter' : p} platform-icon ${p}"></i>`
         ).join(' ');
 
-        const formattedDate = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const formattedStatus = post.status.replace('-', ' ').toUpperCase();
 
         card.innerHTML = `
             <div class="post-card-header">
@@ -469,7 +469,7 @@ function renderDashboardView(brandData, posts) {
             </div>
             <p class="post-content-preview">${post.content}</p>
             <div class="post-card-footer">
-                <span class="post-time"><i class="fa-regular fa-clock"></i> ${formattedDate} at ${post.time}</span>
+                <span class="status-badge ${post.status}"><i class="fa-solid fa-tag"></i> ${formattedStatus}</span>
                 <button class="btn-icon-delete" onclick="event.stopPropagation(); deletePost(${post.id})">
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
@@ -599,65 +599,68 @@ function renderAccountsView(brandData) {
     });
 }
 
-// Render Scheduler Calendar & Creator Layout
+// Render Content Board Layout
 function renderSchedulerView(posts) {
-    const calendarDaysGrid = document.getElementById('calendar-days-grid');
-    if (!calendarDaysGrid) return;
-    calendarDaysGrid.innerHTML = '';
+    const colIdea = document.getElementById('list-idea');
+    const colToEdit = document.getElementById('list-to-edit');
+    const colToView = document.getElementById('list-to-view');
+    const colPosted = document.getElementById('list-posted');
 
-    // Setup base dates (Fixed to June 2026 for consistent sandbox view)
-    const year = 2026;
-    const month = 5; // June (0-indexed)
-    
-    // First day of June 2026 is Monday (1)
-    const firstDayIndex = 1; 
-    const daysInMonth = 30;
+    if (!colIdea) return;
 
-    // Add empty day fillers for offset
-    for (let i = 0; i < firstDayIndex; i++) {
-        const filler = document.createElement('div');
-        filler.className = 'calendar-day empty-day';
-        calendarDaysGrid.appendChild(filler);
-    }
+    // Clear existing cards
+    colIdea.innerHTML = '';
+    colToEdit.innerHTML = '';
+    colToView.innerHTML = '';
+    colPosted.innerHTML = '';
 
-    // Populate actual days
-    for (let day = 1; day <= daysInMonth; day++) {
-        const dayCard = document.createElement('div');
-        dayCard.className = 'calendar-day';
-        
-        // Format string: YYYY-MM-DD
-        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        
-        // Highlighting current local date representation
-        if (day === 9) { // Representation of local time June 9, 2026
-            dayCard.classList.add('today');
+    const counts = { idea: 0, 'to-edit': 0, 'to-view': 0, posted: 0 };
+
+    posts.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'post-feed-card';
+        card.style.cursor = 'pointer';
+        card.setAttribute('onclick', `openEditPostModal(${post.id})`);
+
+        const platformsHtml = post.platforms.map(p => 
+            `<i class="fa-brands fa-${p === 'twitter' ? 'x-twitter' : p} platform-icon ${p}"></i>`
+        ).join(' ');
+
+        card.innerHTML = `
+            <div class="post-card-header" style="margin-bottom: 8px;">
+                <span class="brand-badge ${post.brand}" style="font-size:0.6rem;">${post.brand}</span>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    ${platformsHtml}
+                </div>
+            </div>
+            <p class="post-content-preview" style="font-size: 0.8rem; -webkit-line-clamp: 3; line-height: 1.4; color: var(--text-primary);">${post.content}</p>
+            <div class="post-card-footer" style="margin-top: 8px; justify-content: flex-end;">
+                <button class="btn-icon-delete" onclick="event.stopPropagation(); deletePost(${post.id})" style="padding: 2px;">
+                    <i class="fa-solid fa-trash-can" style="font-size: 0.8rem;"></i>
+                </button>
+            </div>
+        `;
+
+        if (post.status === 'idea') {
+            colIdea.appendChild(card);
+            counts.idea++;
+        } else if (post.status === 'to-edit') {
+            colToEdit.appendChild(card);
+            counts['to-edit']++;
+        } else if (post.status === 'to-view') {
+            colToView.appendChild(card);
+            counts['to-view']++;
+        } else if (post.status === 'posted') {
+            colPosted.appendChild(card);
+            counts.posted++;
         }
+    });
 
-        dayCard.innerHTML = `<span class="day-number">${day}</span>`;
-
-        // Match scheduled posts for this day
-        const dayPosts = posts.filter(p => p.date === dateStr);
-        dayPosts.forEach(post => {
-            const badge = document.createElement('div');
-            badge.className = `calendar-post-badge ${post.brand}`;
-            
-            const firstPlatform = post.platforms[0];
-            const platformIcon = `<i class="fa-brands fa-${firstPlatform === 'twitter' ? 'x-twitter' : firstPlatform} ${firstPlatform}"></i>`;
-            
-            badge.innerHTML = `${platformIcon} <span style="margin-left: 2px;">${post.content}</span>`;
-            badge.title = `${post.brand.toUpperCase()} [${post.platforms.join(', ')}] at ${post.time}: ${post.content}`;
-            
-            // Allow editing post by clicking on badge
-            badge.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openEditPostModal(post.id);
-            });
-
-            dayCard.appendChild(badge);
-        });
-
-        calendarDaysGrid.appendChild(dayCard);
-    }
+    // Update count labels
+    document.getElementById('count-idea').textContent = counts.idea;
+    document.getElementById('count-to-edit').textContent = counts['to-edit'];
+    document.getElementById('count-to-view').textContent = counts['to-view'];
+    document.getElementById('count-posted').textContent = counts.posted;
 }
 
 // Render brand copy guidelines & writing templates
@@ -735,14 +738,13 @@ function renderGuidelinesView(brandData) {
     });
 }
 
-// Add New Scheduled Post Handler
+// Add New Content/Idea Post Handler
 function handleAddPost(e) {
     e.preventDefault();
 
     const brand = document.getElementById('post-brand').value;
     const content = document.getElementById('post-content').value.trim();
-    const date = document.getElementById('post-date').value;
-    const time = document.getElementById('post-time').value;
+    const status = document.getElementById('post-status').value;
 
     // Get selected platforms
     const platforms = [];
@@ -750,8 +752,8 @@ function handleAddPost(e) {
         platforms.push(cb.value);
     });
 
-    if (!content || !date || !time) {
-        alert('Please fill out the content caption, date, and time.');
+    if (!content) {
+        alert('Please fill out the post content.');
         return;
     }
 
@@ -767,8 +769,7 @@ function handleAddPost(e) {
         platforms,
         content,
         category: 'custom',
-        date,
-        time
+        status
     };
 
     posts.unshift(newPost); // Add to beginning
@@ -777,10 +778,11 @@ function handleAddPost(e) {
     // Reset Form
     document.getElementById('post-content').value = '';
     document.querySelectorAll('.platform-checkbox').forEach(cb => cb.checked = false);
+    document.getElementById('post-status').value = 'idea';
 
     // Re-render
     renderAll();
-    alert('Post successfully scheduled!');
+    alert('Post successfully created!');
 }
 
 // Delete scheduled post
@@ -854,8 +856,7 @@ window.openEditPostModal = function(postId) {
     document.getElementById('edit-post-id').value = post.id;
     document.getElementById('edit-post-brand').value = post.brand;
     document.getElementById('edit-post-content').value = post.content;
-    document.getElementById('edit-post-date').value = post.date;
-    document.getElementById('edit-post-time').value = post.time;
+    document.getElementById('edit-post-status').value = post.status;
 
     // Reset platform checkboxes
     document.querySelectorAll('.edit-platform-checkbox').forEach(cb => {
@@ -873,16 +874,15 @@ function handleEditPostSubmit(e) {
     const id = parseInt(document.getElementById('edit-post-id').value);
     const brand = document.getElementById('edit-post-brand').value;
     const content = document.getElementById('edit-post-content').value.trim();
-    const date = document.getElementById('edit-post-date').value;
-    const time = document.getElementById('edit-post-time').value;
+    const status = document.getElementById('edit-post-status').value;
 
     const platforms = [];
     document.querySelectorAll('.edit-platform-checkbox:checked').forEach(cb => {
         platforms.push(cb.value);
     });
 
-    if (!content || !date || !time) {
-        alert('Please fill out the content caption, date, and time.');
+    if (!content) {
+        alert('Please fill out the post content.');
         return;
     }
 
@@ -901,8 +901,7 @@ function handleEditPostSubmit(e) {
     // Update fields
     posts[postIndex].brand = brand;
     posts[postIndex].content = content;
-    posts[postIndex].date = date;
-    posts[postIndex].time = time;
+    posts[postIndex].status = status;
     posts[postIndex].platforms = platforms;
 
     saveScheduledPosts(posts);
