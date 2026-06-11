@@ -211,21 +211,63 @@ BRANDS_DB.master.accounts = [
 ];
 
 const DEFAULT_POSTS = [
-    { id: 7, brand: 'suriosity', platforms: ['linkedin'], content: 'Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits. Today, his harvest is bound for the EU. By setting up farm-gate digital checks near Jabalpur, we bypassed middlemen and paid Ramesh 45% higher rates directly. Sourcing directly is rural empowerment.', category: 'sourcing', status: 'to-view' }
+    { 
+        id: 7, 
+        brand: 'suriosity', 
+        platforms: ['linkedin'], 
+        content: `Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits. 
+
+Today, his harvest is on a container ship bound for the European Union. 🚢
+
+Here is how a farmer from a small village near Jabalpur, Madhya Pradesh, bypassed the traditional squeeze and found a global market:
+
+### The Problem: A Broken Supply Chain
+For generations, smallholders in MP's tribal belts have grown Kodo and Kutki—highly resilient, nutrient-dense ancient grains. They require very little water and thrive naturally without chemical fertilizers.
+
+But the traditional local supply chain was holding them back:
+* Multi-tiered middlemen buying at arbitrary, rock-bottom rates.
+* Outdated physical grading that rejected healthy crop heaps.
+* Long payment delays forcing farmers into high-interest debt cycles.
+
+Ramesh had export-quality grains, but zero market transparency.
+
+### The Solution: The Suriosity Direct-Sourcing Model
+When we established Suriosity’s sourcing network in the Jabalpur division, we bypassed the middlemen and setup farm-gate collection units:
+
+1. **Digital Grading**: We brought portable digital moisture meters directly to Ramesh’s farm. He saw the exact moisture reading (11.5%) in seconds. No guessing, no exploitation.
+2. **Bypassing the Squeeze**: Sourcing directly from FPOs and gate collections allowed us to avoid heavy agent commissions, routing that savings directly to Ramesh.
+3. **Export Training**: We trained Ramesh’s grower cluster on solar-drying and post-harvest handling to meet strict EU pesticide-residue and aflatoxin guidelines (< 4 ppb).
+
+### The Real Impact
+This season, Ramesh bypassed the traditional traders entirely. 
+📈 His net income per hectare increased by **45%**.
+💰 He received secure, instant digital payments on the same day.
+🌾 His clean, organic-grade Kodo Millet was packed in export-certified multi-layer bags and shipped directly to Mundra port.
+
+Direct-sourcing isn't just about supply-chain efficiency. It’s about dignifying agriculture.
+
+When global food brands partner with Suriosity, they aren’t just importing premium grains. They are investing in the livelihood of growers like Ramesh.
+
+How is your brand balancing direct-sourcing ethics with global pricing pressures this year? Let's discuss in the comments. 🤝
+
+#SuriosityAgri #MilletExports #SustainableAgri #Agribusiness`, 
+        category: 'sourcing', 
+        status: 'to-view' 
+    }
 ];
  
 // Local Storage Manager for Scheduled Posts
 function getScheduledPosts() {
-    const stored = localStorage.getItem('master_scheduled_posts_v3');
+    const stored = localStorage.getItem('master_scheduled_posts_v4');
     if (!stored) {
-        localStorage.setItem('master_scheduled_posts_v3', JSON.stringify(DEFAULT_POSTS));
+        localStorage.setItem('master_scheduled_posts_v4', JSON.stringify(DEFAULT_POSTS));
         return DEFAULT_POSTS;
     }
     return JSON.parse(stored);
 }
  
 function saveScheduledPosts(posts) {
-    localStorage.setItem('master_scheduled_posts_v3', JSON.stringify(posts));
+    localStorage.setItem('master_scheduled_posts_v4', JSON.stringify(posts));
 }
 
 // App Initialization
