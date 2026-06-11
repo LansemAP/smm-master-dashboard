@@ -287,6 +287,16 @@ body {
     font-weight: 600;
 }
 
+.user-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.user-link:hover {
+    color: var(--accent);
+}
+
 .user-info p {
     font-size: 0.7rem;
     color: var(--text-muted);
