@@ -210,29 +210,22 @@ BRANDS_DB.master.accounts = [
     ...BRANDS_DB.lansem.accounts
 ];
 
-// Pre-populated Default Posts Scheduler
 const DEFAULT_POSTS = [
-    { id: 7, brand: 'suriosity', platforms: ['linkedin'], content: 'Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits. Today, his harvest is bound for the EU. By setting up farm-gate digital checks near Jabalpur, we bypassed middlemen and paid Ramesh 45% higher rates directly. Sourcing directly is rural empowerment.', category: 'sourcing', date: '2026-06-14', time: '09:30' },
-    { id: 1, brand: 'corely', platforms: ['instagram', 'pinterest'], content: 'Unveiling Corely Organics. 100% GOTS certified premium loopback cotton. Crafted responsibly in Delhi, designed for luxury essential comfort. Pre-orders start Friday.', category: 'product', date: '2026-06-12', time: '10:00' },
-    { id: 2, brand: 'suriosity', platforms: ['linkedin', 'twitter'], content: 'Suriosity Commodities Update: Excellent weather conditions in Rajasthan have produced premium Finger Millet with moisture content stable at 11.5%. Shipping containers ready for shipment to EU partners.', category: 'market', date: '2026-06-15', time: '14:30' },
-    { id: 3, brand: 'lansem', platforms: ['linkedin'], content: 'Is your offshore service center GDPR compliant? Lansem secures client accounting datasets via UK-based VDI desktops, preventing any raw data download. Complete safety, 75% cost savings.', category: 'security', date: '2026-06-10', time: '09:00' },
-    { id: 4, brand: 'corely', platforms: ['tiktok'], content: 'Step inside our partner knitting mills in Delhi. Transparency is in every stitch of Corely Essentials. Meet Rajesh, our production lead.', category: 'behind-the-scenes', date: '2026-06-11', time: '18:00' },
-    { id: 5, brand: 'lansem', platforms: ['twitter', 'linkedin'], content: 'Corporation tax accounts deadline is fast approaching. Don’t wait until the last minute. Our expert offshore team handles bookkeeping and compliance drafting overnight.', category: 'compliance', date: '2026-06-18', time: '11:00' },
-    { id: 6, brand: 'suriosity', platforms: ['facebook', 'youtube'], content: 'Sourcing millet directly from local Indian farmers ensures fair market rates and certified organic sorting. Check out our latest processing facility video tour.', category: 'sourcing', date: '2026-06-20', time: '15:00' }
+    { id: 7, brand: 'suriosity', platforms: ['linkedin'], content: 'Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits. Today, his harvest is bound for the EU. By setting up farm-gate digital checks near Jabalpur, we bypassed middlemen and paid Ramesh 45% higher rates directly. Sourcing directly is rural empowerment.', category: 'sourcing', date: '2026-06-14', time: '09:30' }
 ];
-
+ 
 // Local Storage Manager for Scheduled Posts
 function getScheduledPosts() {
-    const stored = localStorage.getItem('master_scheduled_posts');
+    const stored = localStorage.getItem('master_scheduled_posts_v2');
     if (!stored) {
-        localStorage.setItem('master_scheduled_posts', JSON.stringify(DEFAULT_POSTS));
+        localStorage.setItem('master_scheduled_posts_v2', JSON.stringify(DEFAULT_POSTS));
         return DEFAULT_POSTS;
     }
     return JSON.parse(stored);
 }
-
+ 
 function saveScheduledPosts(posts) {
-    localStorage.setItem('master_scheduled_posts', JSON.stringify(posts));
+    localStorage.setItem('master_scheduled_posts_v2', JSON.stringify(posts));
 }
 
 // App Initialization
