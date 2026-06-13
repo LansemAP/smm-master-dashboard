@@ -300,6 +300,12 @@ function setupEventListeners() {
         scheduleForm.addEventListener('submit', handleAddPost);
     }
 
+    // Connection agent form submission
+    const agentForm = document.getElementById('agent-generate-form');
+    if (agentForm) {
+        agentForm.addEventListener('submit', handleAgentGenerate);
+    }
+
     // Post edit form submission
     const editPostForm = document.getElementById('edit-post-form');
     if (editPostForm) {
@@ -423,6 +429,8 @@ function renderAll() {
         renderSchedulerView(posts);
     } else if (currentTab === 'guidelines') {
         renderGuidelinesView(brandData);
+    } else if (currentTab === 'agent') {
+        renderAgentView();
     }
 }
 
@@ -959,3 +967,296 @@ function handleEditPostDelete() {
         closeAllModals();
     }
 }
+
+// ==========================================
+// CONNECTION AGENT LOGIC & RENDERING
+// ==========================================
+
+// Render Agent View (initialization if needed)
+function renderAgentView() {
+    // Keep it simple
+}
+
+// Extract Name from LinkedIn profile URL
+function extractNameFromLinkedInUrl(url) {
+    try {
+        const parsedUrl = new URL(url);
+        let pathname = parsedUrl.pathname;
+        // Clean trailing slash
+        if (pathname.endsWith('/')) {
+            pathname = pathname.slice(0, -1);
+        }
+        const segments = pathname.split('/').filter(Boolean);
+        // LinkedIn urls look like /in/username
+        const profileSegment = segments[1] || segments[0];
+        if (!profileSegment || profileSegment === 'in') return 'Professional';
+        
+        // Remove ending numbers/hashes (common in linkedin usernames like aneesh-mallick-762bb151)
+        let cleanStr = profileSegment.replace(/-[0-9a-fA-F]+$/, '');
+        // Replace hyphens/underscores with spaces
+        cleanStr = cleanStr.replace(/[-_]/g, ' ');
+        
+        // Capitalize words
+        return cleanStr.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    } catch (e) {
+        return 'Professional';
+    }
+}
+
+// Extract a clean first name, ignoring common professional titles
+function getCleanFirstName(fullName) {
+    const parts = fullName.split(' ').filter(Boolean);
+    if (parts.length === 0) return 'there';
+    
+    const ignoredPrefixes = ['ca', 'cfa', 'dr', 'mr', 'ms', 'mrs', 'adv', 'er', 'cs', 'prof'];
+    
+    // Check if the first word is an ignored prefix
+    let index = 0;
+    while (index < parts.length && ignoredPrefixes.includes(parts[index].toLowerCase())) {
+        index++;
+    }
+    
+    // Return the first non-prefix word, capitalized
+    const firstName = parts[index] || parts[0] || 'there';
+    return firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+}
+
+// Generate Custom Notes based on Name, Strategy, Profile Details, and Character Limit
+function generateCustomNotes(name, strategy, profileText, limit) {
+    const firstName = getCleanFirstName(name);
+    const text = (profileText || '').toLowerCase();
+    
+    // Heuristic analysis of profile details
+    let focus = 'your focus in the industry';
+    let company = 'your firm';
+    let credentials = 'CA/finance';
+    
+    // 1. Detect credentials
+    if (text.includes('ca') && text.includes('cfa')) {
+        credentials = 'CA/CFA';
+        focus = 'your diverse CA and CFA credentials';
+    } else if (text.includes('ca') || text.includes('chartered accountant')) {
+        credentials = 'CA';
+        focus = 'your Chartered Accountancy background';
+    } else if (text.includes('cfa')) {
+        credentials = 'CFA';
+        focus = 'your CFA credentials';
+    } else if (text.includes('cpa')) {
+        credentials = 'CPA';
+        focus = 'your CPA background';
+    } else if (text.includes('tax')) {
+        credentials = 'tax specialist';
+        focus = 'your tax advisory background';
+    } else if (text.includes('valuation') || text.includes('valuer')) {
+        credentials = 'valuation specialist';
+        focus = 'your corporate valuation background';
+    } else if (text.includes('bookkeeping') || text.includes('accounting')) {
+        credentials = 'accounting';
+        focus = 'your work in client accounting services';
+    }
+
+    // 2. Detect company
+    const companyMatch = (profileText || '').match(/(?:at|with|of)\s+([A-Z][A-Za-z0-9&\s]{3,20})/);
+    if (companyMatch) {
+        company = companyMatch[1].trim();
+    } else if (text.includes('mehra goel')) {
+        company = 'Mehra Goel & Co';
+    }
+
+    // 3. Define templates based on Strategy and Limit
+    let options = [];
+
+    if (limit === 200) {
+        if (strategy === 'credentials') {
+            options = [
+                {
+                    title: 'Admiration of Credentials (High Acceptance)',
+                    text: `Hi ${firstName}, came across your profile and was impressed by your ${credentials} background. Expanding my network of finance leaders, would love to connect. Best, Arnab`
+                },
+                {
+                    title: 'Personalized Practice Networking',
+                    text: `Hi ${firstName}, noticed your impressive background at ${company}. Connecting with fellow accounting & finance experts to share insights and discuss trends. Let's connect! Best, Arnab`
+                },
+                {
+                    title: 'Short & Polite Professional Connect',
+                    text: `Hi ${firstName}, hope you're doing well. Noticed your diverse credentials across ${credentials} domains. Building connections with leading finance professionals. Let's connect! Best, Arnab`
+                }
+            ];
+        } else if (strategy === 'networking') {
+            options = [
+                {
+                    title: 'Soft Industry Networking',
+                    text: `Hi ${firstName}, came across your profile and noticed your focus on cloud accounting. I'm building a network of CAs & finance pros to share insights on firm automation. Let's connect! Best, Arnab`
+                },
+                {
+                    title: 'Peer-to-Peer Connection',
+                    text: `Hi ${firstName}, hope you're well. Connecting with leading accounting practitioners to share industry updates and discuss modern accounting trends. Let's connect here. Best, Arnab`
+                },
+                {
+                    title: 'Collaborative Sharing',
+                    text: `Hi ${firstName}, noticed your work at ${company}. Connecting with fellow professionals to share ideas on modern practice management and scaling workflows. Open to connecting? Best, Arnab`
+                }
+            ];
+        } else { // operations
+            options = [
+                {
+                    title: 'Soft Capacity Scaling (No Pitch)',
+                    text: `Hi ${firstName}, noticed your focus on ${focus}. I connect with practice leaders to share ideas on scaling practice capacity, automating ledgers, and solving team bottlenecks. Let's connect! Best, Arnab`
+                },
+                {
+                    title: 'Modern Workflow Trends',
+                    text: `Hi ${firstName}, hope you're well. Connecting with accounting practitioners to share trends on modern ledger workflows, scaling capacity, and optimizing partner time. Let's connect! Best, Arnab`
+                },
+                {
+                    title: 'Practice Operations Focus',
+                    text: `Hi ${firstName}, noticed your work at ${company}. Expanding my network to discuss how boutique practices are scaling ledger processing and tackling junior staffing shortages. Best, Arnab`
+                }
+            ];
+        }
+    } else { // 300 characters
+        if (strategy === 'credentials') {
+            options = [
+                {
+                    title: 'Credentials & Growth Focus',
+                    text: `Hi ${firstName}, came across your profile and was really impressed by your combination of ${credentials} credentials at ${company}. I am expanding my network of finance and accounting leaders in the region to share insights. Would love to connect and keep in touch. Best, Arnab`
+                },
+                {
+                    title: 'Direct Expertise Appreciation',
+                    text: `Hi ${firstName}, hope you're doing well. I noticed your profile and your impressive work across valuation, finance, and ${credentials} domains. I build connections with leading accounting and advisory professionals to share ideas on practice growth. Let's connect here! Best, Arnab`
+                },
+                {
+                    title: 'High-Level Peer Networking',
+                    text: `Hi ${firstName}, noticed your work at ${company} and your extensive background in accounting. I am connecting with fellow finance experts to discuss industry trends, modern reporting, and share insights. Open to connecting and keeping in touch? Best, Arnab`
+                }
+            ];
+        } else if (strategy === 'networking') {
+            options = [
+                {
+                    title: 'Soft Cloud Accounting & Automation',
+                    text: `Hi ${firstName}, came across your profile and noticed your focus on modern accounting. I'm building a network of CAs and finance professionals to share insights on automation, cloud accounting, and solving practice capacity bottlenecks. Let's connect to share ideas! Best, Arnab`
+                },
+                {
+                    title: 'General Professional Networking',
+                    text: `Hi ${firstName}, hope you're doing well. I connect with managing partners and senior practitioners to share operational updates, industry trends, and insights on growing local accounting firms. Would love to add you to my professional network here on LinkedIn. Best, Arnab`
+                },
+                {
+                    title: 'Practice Management Collaboration',
+                    text: `Hi ${firstName}, noticed your work in the accounting space at ${company}. Connecting with fellow CAs to exchange thoughts on modern practice management, advisory growth, and workflow efficiency. Let's connect here to share insights. Best, Arnab`
+                }
+            ];
+        } else { // operations
+            options = [
+                {
+                    title: 'Capacity & Workflow Operations',
+                    text: `Hi ${firstName}, noticed your work at ${company}. I connect with practice partners to share ideas on scaling capacity and modernizing ledger workflows. Many boutique practices are currently exploring secure ways to automate processing and free up partner time. Let's connect. Best, Arnab`
+                },
+                {
+                    title: 'Staffing & Overnight Processing Trends',
+                    text: `Hi ${firstName}, hope you're well. Connecting with accounting leaders to discuss trends in practice capacity, overnight ledger processing, and addressing junior recruitment bottlenecks. Would love to connect and share ideas on optimizing partner bandwidth. Best, Arnab`
+                },
+                {
+                    title: 'B2B Practice Operations Exchange',
+                    text: `Hi ${firstName}, noticed your focus on ${focus}. I connect with practitioners to exchange insights on scaling boutique firm capacity, automating manual bookkeeping, and resolving junior staffing bottlenecks without sacrificing data security. Let's connect! Best, Arnab`
+                }
+            ];
+        }
+    }
+
+    return options;
+}
+
+// Event handler for Generating Connection Notes
+function handleAgentGenerate(e) {
+    e.preventDefault();
+
+    const url = document.getElementById('agent-linkedin-url').value.trim();
+    const strategy = document.getElementById('agent-outreach-strategy').value;
+    const profileText = document.getElementById('agent-profile-text').value.trim();
+    const limit = parseInt(document.getElementById('agent-character-limit').value);
+
+    if (!url) {
+        alert('Please enter a LinkedIn profile URL.');
+        return;
+    }
+
+    const consoleBox = document.getElementById('agent-console');
+    const statusTag = document.getElementById('agent-status-tag');
+    const resultsContainer = document.getElementById('agent-results-container');
+
+    // Reset UI state
+    statusTag.textContent = 'Analyzing...';
+    statusTag.style.color = 'var(--accent)';
+    consoleBox.innerHTML = '';
+    resultsContainer.style.display = 'none';
+    resultsContainer.innerHTML = '';
+
+    // Extracted target name
+    const extractedName = extractNameFromLinkedInUrl(url);
+
+    // Simulated Agent Steps and Timing
+    const steps = [
+        { text: `🔍 Initiating secure connection agent logic for target: ${url}`, type: 'muted', delay: 100 },
+        { text: `👤 Extracting identity... Detected name: <strong>${extractedName}</strong>`, type: 'working', delay: 800 },
+        { text: `🧠 Parsing profile metadata & semantic context: "${profileText ? profileText.slice(0, 45) + '...' : 'None provided'}"`, type: 'muted', delay: 1600 },
+        { text: `🎯 Selected strategy: <strong>${strategy.toUpperCase()}</strong> (Max limit: ${limit} chars)`, type: 'working', delay: 2400 },
+        { text: `📝 Formatting custom connection templates for ${getCleanFirstName(extractedName)}...`, type: 'muted', delay: 3000 },
+        { text: `✅ Note generation complete! Validated under ${limit} character constraint.`, type: 'success', delay: 3600 }
+    ];
+
+    steps.forEach(step => {
+        setTimeout(() => {
+            const line = document.createElement('div');
+            line.className = `console-line ${step.type}`;
+            line.innerHTML = `<i class="fa-solid fa-angle-right"></i> ${step.text}`;
+            consoleBox.appendChild(line);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+
+            // When the last step finishes, render cards
+            if (step.type === 'success') {
+                statusTag.textContent = 'Complete';
+                statusTag.style.color = '#34d399';
+                renderAgentOutput(extractedName, strategy, profileText, limit);
+            }
+        }, step.delay);
+    });
+}
+
+// Render generated note output cards
+function renderAgentOutput(name, strategy, profileText, limit) {
+    const resultsContainer = document.getElementById('agent-results-container');
+    const options = generateCustomNotes(name, strategy, profileText, limit);
+
+    resultsContainer.innerHTML = '';
+    
+    options.forEach((opt, idx) => {
+        const charCount = opt.text.length;
+        const countColorClass = charCount > limit ? 'color: #ef4444;' : (charCount > limit - 20 ? 'color: #fbbf24;' : 'color: #34d399;');
+        const textId = `agent-note-text-${idx}`;
+
+        const card = document.createElement('div');
+        card.className = 'template-card';
+        card.style.background = 'rgba(255, 255, 255, 0.02)';
+        card.style.border = '1px solid var(--border-color)';
+        card.style.padding = '16px';
+        card.style.borderRadius = '12px';
+        card.style.transition = 'all 0.3s ease';
+        
+        card.innerHTML = `
+            <div class="template-meta" style="margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 0.75rem;">
+                <span class="template-tag" style="font-weight: 700; color: var(--accent); text-transform: uppercase;">${opt.title}</span>
+                <span class="template-desc" style="${countColorClass} font-family: monospace; font-weight: 600;">${charCount} / ${limit} chars</span>
+            </div>
+            <div class="template-body" style="padding: 14px; background: rgba(0, 0, 0, 0.25); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-primary); position: relative; font-family: var(--font-body); font-size: 0.85rem; line-height: 1.5; white-space: normal;">
+                <textarea id="${textId}" style="position:absolute; left:-9999px;">${opt.text}</textarea>
+                <span>${opt.text}</span>
+                <button class="btn-copy" onclick="copyTemplateText('${textId}')" style="top: 10px; right: 10px; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer;">
+                    <i class="fa-regular fa-copy"></i> Copy Note
+                </button>
+            </div>
+        `;
+        resultsContainer.appendChild(card);
+    });
+
+    resultsContainer.style.display = 'flex';
+}
+

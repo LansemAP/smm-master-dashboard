@@ -64,6 +64,9 @@ now <!DOCTYPE html>
                 <div class="nav-link" data-tab="guidelines">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> Voice & Templates
                 </div>
+                <div class="nav-link" data-tab="agent">
+                    <i class="fa-solid fa-user-plus"></i> Connection Agent
+                </div>
             </nav>
 
             <!-- Sidebar User Info Footer -->
@@ -331,6 +334,70 @@ now <!DOCTYPE html>
                         <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: 24px;">Post Inspiration Templates</h3>
                         <div class="templates-list" id="guidelines-templates-list">
                             <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 5: LinkedIn Connection Agent View -->
+            <section id="agent-view" class="view-section">
+                <div class="agent-layout">
+                    <!-- Left Panel: Input controls -->
+                    <div class="creator-panel glass-panel">
+                        <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: 20px;">Connection Agent</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5;">
+                            Analyze a target's LinkedIn profile and generate a custom, high-converting connection request note (under 200/300 characters) without sounding salesy.
+                        </p>
+                        
+                        <form id="agent-generate-form">
+                            <div class="form-group">
+                                <label for="agent-linkedin-url">LinkedIn Profile URL</label>
+                                <input type="url" id="agent-linkedin-url" class="form-control" placeholder="https://www.linkedin.com/in/username" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="agent-outreach-strategy">Outreach Strategy</label>
+                                <select id="agent-outreach-strategy" class="form-control" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
+                                    <option value="credentials">Credentials & Achievements (Complimentary)</option>
+                                    <option value="networking">General Industry Networking (Soft Approach)</option>
+                                    <option value="operations">Capacity & Scaling Focus (Operations, No Pitch)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="agent-profile-text">Profile Copy / Headline / Details (Optional)</label>
+                                <textarea id="agent-profile-text" class="form-control" placeholder="Paste headline, job description, or about section for deeper personalization..." style="height: 110px;"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="agent-character-limit">Max Character Limit</label>
+                                <select id="agent-character-limit" class="form-control" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
+                                    <option value="200">200 Characters (Highly Recommended)</option>
+                                    <option value="300">300 Characters (LinkedIn Standard Limit)</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Connection Notes
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right Panel: Agent Log & Output -->
+                    <div class="agent-output-panel glass-panel">
+                        <div class="panel-header">
+                             <h3>Agent Analysis & Output</h3>
+                             <span id="agent-status-tag" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Idle</span>
+                        </div>
+                         
+                        <!-- Simulated Agent Thinking Console -->
+                        <div class="console-box" id="agent-console">
+                            <div class="console-line muted"><i class="fa-solid fa-angle-right"></i> Standing by. Enter a profile URL to start analysis...</div>
+                        </div>
+
+                        <!-- Output Results Cards -->
+                        <div class="agent-results-wrapper" id="agent-results-container" style="display: none; flex-direction: column; gap: 16px; margin-top: 20px;">
+                            <!-- Dynamic cards will go here -->
                         </div>
                     </div>
                 </div>
