@@ -1590,7 +1590,7 @@ function openLibraryPreview(postId) {
             </button>
         </div>
     `;
-    modal.style.display = 'flex';
+    modal.classList.add('active');
 }
 
 function saveLibraryStatus(postId) {
@@ -1622,5 +1622,5 @@ function deleteLibraryPost(postId) {
 
 function closeLibraryPreview() {
     const modal = document.getElementById('lib-preview-modal');
-    if (modal) modal.style.display = 'none';
+    if (modal) modal.classList.remove('active');
 }
