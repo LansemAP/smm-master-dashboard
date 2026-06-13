@@ -1704,3 +1704,88 @@ textarea.form-control {
         grid-template-columns: 1fr;
     }
 }
+
+/* ---- Asset Badges (on card) ---- */
+.lib-card-assets {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.lib-asset-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 10px;
+}
+
+.lib-asset-badge.pdf {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.lib-asset-badge.png {
+    background: rgba(96, 165, 250, 0.1);
+    color: #93c5fd;
+    border: 1px solid rgba(96, 165, 250, 0.25);
+}
+
+/* ---- Asset Panel (in modal) ---- */
+.lib-assets-panel {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lib-assets-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 4px;
+}
+
+.lib-asset-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.lib-asset-row:last-child {
+    border-bottom: none;
+}
+
+.lib-asset-row span:first-of-type {
+    flex: 1;
+}
+
+.lib-asset-filename {
+    font-family: monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}

@@ -1317,7 +1317,15 @@ const LIBRARY_DEFAULT_POSTS = [
         tags: ['#MilletRevolution', '#IndianAgriculture', '#GlobalFood', '#Sustainability', '#FoodSecurity', '#SuriosityAgri'],
         slides: 5,
         content: `A grain that survived Ice Ages is now outselling quinoa in European health stores.\n\nIndian millet — the same crop that tribal farmers in Madhya Pradesh have grown for 3,000 years without synthetic fertilizer — is quietly becoming the world's most sought-after superfood.\n\n5 facts:\n1. Kodra (Kodo) & Kutki (Samai/Varagu) thrive on 400mm rainfall. No irrigation.\n2. Ragi (Kelvaragu/Mandua) GI ~54 — vs white bread at 75.\n3. Bajra (Kambu/Sajje) has 2–3x more iron per 100g than spinach.\n4. UN declared 2023 the International Year of Millets. 70+ countries participated.\n5. India produces 170 lakh tonnes of millets — ~20% of global supply.\n\nDrop your city and country in the comments. 🌾`,
-        notes: 'Upload all 5 slides as a PDF document for max LinkedIn reach. Drop sources in first comment immediately after posting.'
+        notes: 'Upload all 5 slides as a PDF document for max LinkedIn reach. Drop sources in first comment immediately after posting.',
+        assets: [
+            { type: 'pdf', label: 'Carousel PDF (LinkedIn Upload)', file: 'Suriosity/LinkedIn/assets/millet_global_impact/millet_global_impact_carousel.pdf' },
+            { type: 'png', label: 'Slide 01 — Climate Story', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_01_climate_story.png' },
+            { type: 'png', label: 'Slide 02 — Ragi Glycemic', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_02_ragi_glycemic.png' },
+            { type: 'png', label: 'Slide 03 — Bajra Iron', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_03_bajra_iron.png' },
+            { type: 'png', label: 'Slide 04 — IYM 2023', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_04_iym_2023.png' },
+            { type: 'png', label: 'Slide 05 — 170 Lakh Tonnes', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_05_170_lakh_tonnes.png' }
+        ]
     },
     {
         id: 'lib-2',
@@ -1451,6 +1459,36 @@ const PLATFORM_ICONS = {
     youtube:   { icon: 'fa-brands fa-youtube',   color: '#ff0000' }
 };
 
+// Build assets section HTML for card or modal
+function buildAssetsHtml(assets, context) {
+    if (!assets || assets.length === 0) return '';
+    if (context === 'card') {
+        // Compact: just PDF badge + count
+        const pdf = assets.find(a => a.type === 'pdf');
+        const pngs = assets.filter(a => a.type === 'png');
+        const badges = [];
+        if (pdf) badges.push(`<span class="lib-asset-badge pdf"><i class="fa-regular fa-file-pdf"></i> PDF ready</span>`);
+        if (pngs.length) badges.push(`<span class="lib-asset-badge png"><i class="fa-regular fa-images"></i> ${pngs.length} slides</span>`);
+        return `<div class="lib-card-assets">${badges.join('')}</div>`;
+    }
+    // Full list for modal
+    const rows = assets.map(a => {
+        const icon = a.type === 'pdf' ? 'fa-file-pdf' : 'fa-file-image';
+        const color = a.type === 'pdf' ? '#ef4444' : '#60a5fa';
+        return `<div class="lib-asset-row">
+            <i class="fa-regular ${icon}" style="color:${color};"></i>
+            <span>${a.label}</span>
+            <span class="lib-asset-filename">${a.file.split('/').pop()}</span>
+        </div>`;
+    }).join('');
+    return `
+        <div class="lib-assets-panel">
+            <div class="lib-assets-header"><i class="fa-solid fa-paperclip"></i> Attached Assets</div>
+            ${rows}
+        </div>
+    `;
+}
+
 function buildLibraryCard(post) {
     const card = document.createElement('div');
     card.className = 'lib-card';
@@ -1469,6 +1507,7 @@ function buildLibraryCard(post) {
     const tagsHtml = (post.tags || []).slice(0, 3).map(t =>
         `<span class="lib-tag">${t}</span>`
     ).join('');
+    const assetsHtml = buildAssetsHtml(post.assets, 'card');
 
     card.innerHTML = `
         <div class="lib-card-top">
@@ -1486,6 +1525,7 @@ function buildLibraryCard(post) {
         <h4 class="lib-card-title">${post.title}</h4>
         <p class="lib-card-preview">${preview}…</p>
         <div class="lib-card-tags">${tagsHtml}</div>
+        ${assetsHtml}
         <div class="lib-card-footer">
             <div class="lib-card-platforms">${platformIcons}</div>
             <div class="lib-card-date">${post.createdAt}</div>
@@ -1539,6 +1579,7 @@ function openLibraryPreview(postId) {
         <h3 style="font-family:var(--font-heading); font-size:1.15rem; margin-bottom:14px;">${post.title}</h3>
         <div style="white-space:pre-wrap; font-size:0.88rem; line-height:1.7; color:var(--text-primary); background:rgba(0,0,0,0.2); padding:18px; border-radius:10px; border:1px solid var(--border-color); max-height:280px; overflow-y:auto; margin-bottom:16px;">${post.content}</div>
         ${post.notes ? `<div style="font-size:0.8rem; color:var(--text-muted); background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:8px; padding:10px 14px; margin-bottom:16px;"><i class="fa-solid fa-note-sticky" style="margin-right:6px;"></i>${post.notes}</div>` : ''}
+        ${buildAssetsHtml(post.assets, 'modal')}
         <div style="display:flex; gap:12px; align-items:center;">
             <label style="font-size:0.8rem; color:var(--text-secondary); white-space:nowrap;">Change Status:</label>
             <select id="lib-preview-status-select" style="flex:1; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:var(--text-primary); border-radius:8px; padding:8px 12px; font-size:0.85rem;">
