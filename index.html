@@ -63,6 +63,9 @@
                 <div class="nav-link" data-tab="guidelines">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> Voice & Templates
                 </div>
+                <div class="nav-link" data-tab="library">
+                    <i class="fa-solid fa-layer-group"></i> Post Library
+                </div>
                 <div class="nav-link" data-tab="agent">
                     <i class="fa-solid fa-user-plus"></i> Connection Agent
                 </div>
@@ -338,7 +341,73 @@
                 </div>
             </section>
 
-            <!-- Tab 5: LinkedIn Connection Agent View -->
+            <!-- Tab 5: Post Library View -->
+            <section id="library-view" class="view-section">
+                <div class="library-header">
+                    <div class="library-filter-bar glass-panel">
+                        <!-- Search -->
+                        <div class="library-search-wrapper">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="library-search" placeholder="Search posts, hashtags, keywords..." class="library-search-input">
+                        </div>
+                        <!-- Brand Filter -->
+                        <div class="library-filters">
+                            <select id="lib-filter-brand" class="lib-select">
+                                <option value="all">All Brands</option>
+                                <option value="suriosity">Suriosity</option>
+                                <option value="corely">Corely</option>
+                                <option value="lansem">Lansem</option>
+                            </select>
+                            <select id="lib-filter-platform" class="lib-select">
+                                <option value="all">All Platforms</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="twitter">Twitter/X</option>
+                                <option value="facebook">Facebook</option>
+                            </select>
+                            <select id="lib-filter-category" class="lib-select">
+                                <option value="all">All Categories</option>
+                                <option value="carousel">Carousel</option>
+                                <option value="thought-leadership">Thought Leadership</option>
+                                <option value="sourcing">Sourcing Story</option>
+                                <option value="market-insights">Market Insights</option>
+                                <option value="compliance">Compliance</option>
+                                <option value="product">Product / Collection</option>
+                                <option value="behind-scenes">Behind the Scenes</option>
+                            </select>
+                            <select id="lib-filter-status" class="lib-select">
+                                <option value="all">All Statuses</option>
+                                <option value="idea">Idea / Draft</option>
+                                <option value="to-edit">To Edit</option>
+                                <option value="to-view">To View</option>
+                                <option value="posted">Posted</option>
+                            </select>
+                        </div>
+                        <button id="lib-add-btn" class="btn-primary" style="white-space:nowrap;">
+                            <i class="fa-solid fa-plus"></i> Add Post
+                        </button>
+                    </div>
+
+                    <!-- Category Quick-filter pills -->
+                    <div class="lib-category-pills" id="lib-category-pills">
+                        <button class="lib-pill active" data-cat="all">All Posts</button>
+                        <button class="lib-pill" data-cat="carousel"><i class="fa-solid fa-images"></i> Carousel</button>
+                        <button class="lib-pill" data-cat="thought-leadership"><i class="fa-solid fa-lightbulb"></i> Thought Leadership</button>
+                        <button class="lib-pill" data-cat="sourcing"><i class="fa-solid fa-seedling"></i> Sourcing Story</button>
+                        <button class="lib-pill" data-cat="market-insights"><i class="fa-solid fa-chart-bar"></i> Market Insights</button>
+                        <button class="lib-pill" data-cat="compliance"><i class="fa-solid fa-shield-halved"></i> Compliance</button>
+                        <button class="lib-pill" data-cat="product"><i class="fa-solid fa-box"></i> Product</button>
+                        <button class="lib-pill" data-cat="behind-scenes"><i class="fa-solid fa-camera"></i> Behind the Scenes</button>
+                    </div>
+                </div>
+
+                <!-- Post cards grid -->
+                <div class="library-grid" id="library-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Tab 6: LinkedIn Connection Agent View -->
             <section id="agent-view" class="view-section">
                 <div class="agent-layout">
                     <!-- Left Panel: Input controls -->
@@ -506,6 +575,19 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Library Preview Modal -->
+    <div class="modal-overlay" id="lib-preview-modal" style="display:none;" onclick="if(event.target===this)closeLibraryPreview()">
+        <div class="modal-card glass-panel" style="max-width:680px; width:95%;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-layer-group" style="margin-right:8px;"></i>Post Preview</h3>
+                <button class="btn-modal-close" onclick="closeLibraryPreview()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="lib-preview-content">
+                <!-- Populated by JS -->
             </div>
         </div>
     </div>

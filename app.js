@@ -4,7 +4,8 @@
 
 // Global state
 let currentBrand = 'master'; // 'master', 'corely', 'suriosity', 'lansem'
-let currentTab = 'dashboard'; // 'dashboard', 'accounts', 'scheduler', 'guidelines'
+let currentTab = 'dashboard'; // 'dashboard', 'accounts', 'scheduler', 'guidelines', 'library', 'agent'
+let libActivePill = 'all'; // active category pill filter in Post Library
 
 // Brand Information Database
 const BRANDS_DB = {
@@ -332,10 +333,46 @@ function setupEventListeners() {
     if (quickAddBtn) {
         quickAddBtn.addEventListener('click', () => {
             switchTab('scheduler');
-            // Focus on post creation form
             document.getElementById('post-content').focus();
         });
     }
+
+    // Post Library: Add Post button -> opens scheduler
+    const libAddBtn = document.getElementById('lib-add-btn');
+    if (libAddBtn) {
+        libAddBtn.addEventListener('click', () => switchTab('scheduler'));
+    }
+
+    // Post Library: category pills
+    document.querySelectorAll('.lib-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+            libActivePill = e.currentTarget.dataset.cat;
+            document.querySelectorAll('.lib-pill').forEach(p => p.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            // Sync category dropdown
+            const catSelect = document.getElementById('lib-filter-category');
+            if (catSelect) catSelect.value = libActivePill;
+            renderLibraryView();
+        });
+    });
+
+    // Post Library: filter dropdowns
+    ['lib-filter-brand','lib-filter-platform','lib-filter-category','lib-filter-status'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', () => {
+            if (id === 'lib-filter-category') {
+                libActivePill = el.value;
+                document.querySelectorAll('.lib-pill').forEach(p => {
+                    p.classList.toggle('active', p.dataset.cat === libActivePill);
+                });
+            }
+            renderLibraryView();
+        });
+    });
+
+    // Post Library: search input
+    const libSearch = document.getElementById('library-search');
+    if (libSearch) libSearch.addEventListener('input', () => renderLibraryView());
 }
 
 // Switch between active brands
@@ -429,6 +466,8 @@ function renderAll() {
         renderSchedulerView(posts);
     } else if (currentTab === 'guidelines') {
         renderGuidelinesView(brandData);
+    } else if (currentTab === 'library') {
+        renderLibraryView();
     } else if (currentTab === 'agent') {
         renderAgentView();
     }
@@ -1260,3 +1299,287 @@ function renderAgentOutput(name, strategy, profileText, limit) {
     resultsContainer.style.display = 'flex';
 }
 
+// =============================================
+// POST LIBRARY — CATEGORY & POST MANAGER
+// =============================================
+
+const LIBRARY_POSTS_KEY = 'smm_library_posts_v1';
+
+const LIBRARY_DEFAULT_POSTS = [
+    {
+        id: 'lib-1',
+        brand: 'suriosity',
+        title: 'The Hidden Global Impact of Indian Millets',
+        category: 'carousel',
+        platforms: ['linkedin'],
+        status: 'to-view',
+        createdAt: '2026-06-13',
+        tags: ['#MilletRevolution', '#IndianAgriculture', '#GlobalFood', '#Sustainability', '#FoodSecurity', '#SuriosityAgri'],
+        slides: 5,
+        content: `A grain that survived Ice Ages is now outselling quinoa in European health stores.\n\nIndian millet — the same crop that tribal farmers in Madhya Pradesh have grown for 3,000 years without synthetic fertilizer — is quietly becoming the world's most sought-after superfood.\n\n5 facts:\n1. Kodra (Kodo) & Kutki (Samai/Varagu) thrive on 400mm rainfall. No irrigation.\n2. Ragi (Kelvaragu/Mandua) GI ~54 — vs white bread at 75.\n3. Bajra (Kambu/Sajje) has 2–3x more iron per 100g than spinach.\n4. UN declared 2023 the International Year of Millets. 70+ countries participated.\n5. India produces 170 lakh tonnes of millets — ~20% of global supply.\n\nDrop your city and country in the comments. 🌾`,
+        notes: 'Upload all 5 slides as a PDF document for max LinkedIn reach. Drop sources in first comment immediately after posting.'
+    },
+    {
+        id: 'lib-2',
+        brand: 'suriosity',
+        title: 'Ramesh Gond — From Jabalpur to EU Markets',
+        category: 'sourcing',
+        platforms: ['linkedin'],
+        status: 'to-view',
+        createdAt: '2026-06-10',
+        tags: ['#SuriosityAgri', '#MilletExports', '#SustainableAgri', '#Agribusiness'],
+        slides: 0,
+        content: `Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits.\n\nToday, his harvest is on a container ship bound for the European Union.\n\nDirect-sourcing isn't just about supply-chain efficiency. It's about dignifying agriculture.\n\nWhen global food brands partner with Suriosity, they aren't just importing premium grains. They are investing in the livelihood of growers like Ramesh.\n\nHow is your brand balancing direct-sourcing ethics with global pricing pressures? Let's discuss in the comments. 🤝`,
+        notes: 'Long-form post. Strong engagement potential with farmers, exporters, and food brands.'
+    },
+    {
+        id: 'lib-3',
+        brand: 'lansem',
+        title: 'HMRC Filing Deadline Reminder',
+        category: 'compliance',
+        platforms: ['linkedin'],
+        status: 'idea',
+        createdAt: '2026-06-08',
+        tags: ['#LansemUK', '#UKAccounting', '#HMRCCompliance'],
+        slides: 0,
+        content: `HMRC Filing Deadline Reminder.\n\nAvoid late submission penalties. UK SMEs must file corporation tax accounts within 9 months of their financial year end.\n\nOur secure, VDI-locked Indian delivery center can draft your management accounts overnight, saving you up to 75% on in-house accounting overhead.\n\nSend us a DM to set up a pilot.\n\n#LansemUK #UKAccounting #HMRCCompliance`,
+        notes: 'Post near end of fiscal quarter for maximum relevance. Consider pairing with a UK tax calendar graphic.'
+    },
+    {
+        id: 'lib-4',
+        brand: 'corely',
+        title: 'Corely Autumn Essentials — Product Launch',
+        category: 'product',
+        platforms: ['instagram', 'pinterest'],
+        status: 'idea',
+        createdAt: '2026-06-05',
+        tags: ['#CorelyOrganics', '#SlowFashion', '#LuxuryEssentials', '#GOTS'],
+        slides: 0,
+        content: `Sand, charcoal, and ivory. Corely Autumn Essentials.\n\nCrafted from 400 GSM high-density loopback organic cotton. Verified GOTS certified mills. Hand-dyed and finished in Delhi.\n\nDesigned to outlast trends.\nPre-ordering opens this Friday. Link in bio.\n\n#CorelyOrganics #SlowFashion #MinimalistStyle`,
+        notes: 'Pair with lifestyle product shot from Delhi atelier. Warm, natural light preferred.'
+    }
+];
+
+function getLibraryPosts() {
+    const stored = localStorage.getItem(LIBRARY_POSTS_KEY);
+    if (!stored) {
+        localStorage.setItem(LIBRARY_POSTS_KEY, JSON.stringify(LIBRARY_DEFAULT_POSTS));
+        return LIBRARY_DEFAULT_POSTS;
+    }
+    return JSON.parse(stored);
+}
+
+function saveLibraryPosts(posts) {
+    localStorage.setItem(LIBRARY_POSTS_KEY, JSON.stringify(posts));
+}
+
+function renderLibraryView() {
+    const grid = document.getElementById('library-grid');
+    if (!grid) return;
+
+    const searchVal = (document.getElementById('library-search')?.value || '').toLowerCase();
+    const brandFilter = document.getElementById('lib-filter-brand')?.value || 'all';
+    const platformFilter = document.getElementById('lib-filter-platform')?.value || 'all';
+    const catFilter = libActivePill;
+    const statusFilter = document.getElementById('lib-filter-status')?.value || 'all';
+
+    let posts = getLibraryPosts();
+
+    if (currentBrand !== 'master') {
+        posts = posts.filter(p => p.brand === currentBrand);
+    }
+    if (brandFilter !== 'all') posts = posts.filter(p => p.brand === brandFilter);
+    if (platformFilter !== 'all') posts = posts.filter(p => p.platforms.includes(platformFilter));
+    if (catFilter !== 'all') posts = posts.filter(p => p.category === catFilter);
+    if (statusFilter !== 'all') posts = posts.filter(p => p.status === statusFilter);
+    if (searchVal) posts = posts.filter(p =>
+        p.title.toLowerCase().includes(searchVal) ||
+        p.content.toLowerCase().includes(searchVal) ||
+        (p.tags || []).some(t => t.toLowerCase().includes(searchVal))
+    );
+
+    grid.innerHTML = '';
+
+    if (posts.length === 0) {
+        grid.innerHTML = `
+            <div class="lib-empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <p>No posts match your filters.</p>
+                <button class="btn-primary" onclick="switchTab('scheduler')" style="margin-top:12px;">
+                    <i class="fa-solid fa-plus"></i> Create First Post
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    posts.forEach(post => {
+        const card = buildLibraryCard(post);
+        grid.appendChild(card);
+    });
+}
+
+const BRAND_META = {
+    suriosity: { label: 'Suriosity', color: '#65c97a', icon: 'fa-wheat-awn' },
+    corely:    { label: 'Corely',    color: '#c9a065', icon: 'fa-shirt' },
+    lansem:    { label: 'Lansem UK', color: '#6592c9', icon: 'fa-briefcase' }
+};
+
+const STATUS_META = {
+    'idea':    { label: 'Draft',    color: '#64748b' },
+    'to-edit': { label: 'To Edit',  color: '#fbbf24' },
+    'to-view': { label: 'To View',  color: '#a855f7' },
+    'posted':  { label: 'Posted',   color: '#10b981' }
+};
+
+const CATEGORY_META = {
+    'carousel':           { label: 'Carousel',           icon: 'fa-images' },
+    'thought-leadership': { label: 'Thought Leadership',  icon: 'fa-lightbulb' },
+    'sourcing':           { label: 'Sourcing Story',      icon: 'fa-seedling' },
+    'market-insights':    { label: 'Market Insights',     icon: 'fa-chart-bar' },
+    'compliance':         { label: 'Compliance',          icon: 'fa-shield-halved' },
+    'product':            { label: 'Product',             icon: 'fa-box' },
+    'behind-scenes':      { label: 'Behind the Scenes',   icon: 'fa-camera' }
+};
+
+const PLATFORM_ICONS = {
+    linkedin:  { icon: 'fa-brands fa-linkedin',  color: '#0077b5' },
+    instagram: { icon: 'fa-brands fa-instagram', color: '#e1306c' },
+    twitter:   { icon: 'fa-brands fa-x-twitter', color: '#1da1f2' },
+    facebook:  { icon: 'fa-brands fa-facebook',  color: '#1877f2' },
+    pinterest: { icon: 'fa-brands fa-pinterest', color: '#bd081c' },
+    youtube:   { icon: 'fa-brands fa-youtube',   color: '#ff0000' }
+};
+
+function buildLibraryCard(post) {
+    const card = document.createElement('div');
+    card.className = 'lib-card';
+    card.setAttribute('data-id', post.id);
+
+    const brand = BRAND_META[post.brand] || { label: post.brand, color: '#888', icon: 'fa-circle' };
+    const status = STATUS_META[post.status] || { label: post.status, color: '#888' };
+    const cat = CATEGORY_META[post.category] || { label: post.category, icon: 'fa-file' };
+
+    const platformIcons = (post.platforms || []).map(p => {
+        const m = PLATFORM_ICONS[p] || { icon: 'fa-globe', color: '#888' };
+        return `<i class="${m.icon}" style="color:${m.color}; font-size:1rem;" title="${p}"></i>`;
+    }).join('');
+
+    const preview = post.content.slice(0, 120).replace(/\n/g, ' ');
+    const tagsHtml = (post.tags || []).slice(0, 3).map(t =>
+        `<span class="lib-tag">${t}</span>`
+    ).join('');
+
+    card.innerHTML = `
+        <div class="lib-card-top">
+            <div class="lib-card-brand" style="color:${brand.color}">
+                <i class="fa-solid ${brand.icon}"></i> ${brand.label}
+            </div>
+            <div class="lib-card-status" style="background:${status.color}22; color:${status.color}; border:1px solid ${status.color}44;">
+                ${status.label}
+            </div>
+        </div>
+        <div class="lib-card-category">
+            <i class="fa-solid ${cat.icon}"></i> ${cat.label}
+            ${post.slides > 0 ? `<span class="lib-slides-badge">${post.slides} slides</span>` : ''}
+        </div>
+        <h4 class="lib-card-title">${post.title}</h4>
+        <p class="lib-card-preview">${preview}…</p>
+        <div class="lib-card-tags">${tagsHtml}</div>
+        <div class="lib-card-footer">
+            <div class="lib-card-platforms">${platformIcons}</div>
+            <div class="lib-card-date">${post.createdAt}</div>
+        </div>
+        <div class="lib-card-actions">
+            <button class="lib-btn-preview" onclick="openLibraryPreview('${post.id}')">
+                <i class="fa-regular fa-eye"></i> Preview
+            </button>
+            <button class="lib-btn-status" onclick="cycleLibraryStatus('${post.id}')">
+                <i class="fa-solid fa-arrow-right"></i> Advance
+            </button>
+            <button class="lib-btn-delete" onclick="deleteLibraryPost('${post.id}')">
+                <i class="fa-regular fa-trash-can"></i>
+            </button>
+        </div>
+    `;
+    return card;
+}
+
+function openLibraryPreview(postId) {
+    const posts = getLibraryPosts();
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    const brand = BRAND_META[post.brand] || { label: post.brand, color: '#888', icon: 'fa-circle' };
+    const status = STATUS_META[post.status] || { label: post.status, color: '#888' };
+    const cat = CATEGORY_META[post.category] || { label: post.category, icon: 'fa-file' };
+
+    const platformIcons = (post.platforms || []).map(p => {
+        const m = PLATFORM_ICONS[p] || { icon: 'fa-globe', color: '#888' };
+        return `<i class="${m.icon}" style="color:${m.color}; font-size:1.1rem;" title="${p}"></i>`;
+    }).join(' ');
+
+    const statusOptions = Object.entries(STATUS_META).map(([val, meta]) =>
+        `<option value="${val}" ${post.status === val ? 'selected' : ''}>${meta.label}</option>`
+    ).join('');
+
+    const modal = document.getElementById('lib-preview-modal');
+    const modalContent = document.getElementById('lib-preview-content');
+
+    modalContent.innerHTML = `
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:18px;">
+            <span style="color:${brand.color}; font-weight:700;"><i class="fa-solid ${brand.icon}"></i> ${brand.label}</span>
+            <span style="color:var(--text-muted);">·</span>
+            <span style="color:var(--text-secondary);"><i class="fa-solid ${cat.icon}"></i> ${cat.label}</span>
+            <span style="color:var(--text-muted);">·</span>
+            <span>${platformIcons}</span>
+            <span style="color:var(--text-muted);">·</span>
+            <span style="background:${status.color}22; color:${status.color}; border:1px solid ${status.color}44; padding:2px 10px; border-radius:20px; font-size:0.75rem; font-weight:600;">${status.label}</span>
+        </div>
+        <h3 style="font-family:var(--font-heading); font-size:1.15rem; margin-bottom:14px;">${post.title}</h3>
+        <div style="white-space:pre-wrap; font-size:0.88rem; line-height:1.7; color:var(--text-primary); background:rgba(0,0,0,0.2); padding:18px; border-radius:10px; border:1px solid var(--border-color); max-height:280px; overflow-y:auto; margin-bottom:16px;">${post.content}</div>
+        ${post.notes ? `<div style="font-size:0.8rem; color:var(--text-muted); background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:8px; padding:10px 14px; margin-bottom:16px;"><i class="fa-solid fa-note-sticky" style="margin-right:6px;"></i>${post.notes}</div>` : ''}
+        <div style="display:flex; gap:12px; align-items:center;">
+            <label style="font-size:0.8rem; color:var(--text-secondary); white-space:nowrap;">Change Status:</label>
+            <select id="lib-preview-status-select" style="flex:1; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:var(--text-primary); border-radius:8px; padding:8px 12px; font-size:0.85rem;">
+                ${statusOptions}
+            </select>
+            <button class="btn-primary" onclick="saveLibraryStatus('${post.id}')" style="white-space:nowrap;">
+                <i class="fa-solid fa-check"></i> Save
+            </button>
+        </div>
+    `;
+    modal.style.display = 'flex';
+}
+
+function saveLibraryStatus(postId) {
+    const newStatus = document.getElementById('lib-preview-status-select').value;
+    const posts = getLibraryPosts();
+    const idx = posts.findIndex(p => p.id === postId);
+    if (idx > -1) { posts[idx].status = newStatus; saveLibraryPosts(posts); }
+    closeLibraryPreview();
+    renderLibraryView();
+}
+
+function cycleLibraryStatus(postId) {
+    const order = ['idea', 'to-edit', 'to-view', 'posted'];
+    const posts = getLibraryPosts();
+    const idx = posts.findIndex(p => p.id === postId);
+    if (idx > -1) {
+        const ci = order.indexOf(posts[idx].status);
+        posts[idx].status = order[(ci + 1) % order.length];
+        saveLibraryPosts(posts);
+        renderLibraryView();
+    }
+}
+
+function deleteLibraryPost(postId) {
+    if (!confirm('Delete this post from the library?')) return;
+    saveLibraryPosts(getLibraryPosts().filter(p => p.id !== postId));
+    renderLibraryView();
+}
+
+function closeLibraryPreview() {
+    const modal = document.getElementById('lib-preview-modal');
+    if (modal) modal.style.display = 'none';
+}
