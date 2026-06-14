@@ -307,6 +307,30 @@ function setupEventListeners() {
         agentForm.addEventListener('submit', handleAgentGenerate);
     }
 
+    // Pre-load saved API Key if any
+    const apiKeyInput = document.getElementById('agent-api-key');
+    if (apiKeyInput) {
+        apiKeyInput.value = localStorage.getItem('smm_anthropic_api_key') || '';
+        apiKeyInput.addEventListener('input', (e) => {
+            localStorage.setItem('smm_anthropic_api_key', e.target.value.trim());
+        });
+    }
+
+    // Toggle API Key input group based on engine selection
+    const engineSelect = document.getElementById('agent-engine');
+    const apiKeyGroup = document.getElementById('agent-api-key-group');
+    if (engineSelect && apiKeyGroup) {
+        const toggleApiKeyVisibility = () => {
+            if (engineSelect.value === 'simulated') {
+                apiKeyGroup.style.display = 'none';
+            } else {
+                apiKeyGroup.style.display = 'flex';
+            }
+        };
+        engineSelect.addEventListener('change', toggleApiKeyVisibility);
+        toggleApiKeyVisibility(); // Trigger initial state
+    }
+
     // Post edit form submission
     const editPostForm = document.getElementById('edit-post-form');
     if (editPostForm) {
@@ -1212,6 +1236,7 @@ function handleAgentGenerate(e) {
     const strategy = document.getElementById('agent-outreach-strategy').value;
     const profileText = document.getElementById('agent-profile-text').value.trim();
     const limit = parseInt(document.getElementById('agent-character-limit').value);
+    const engine = document.getElementById('agent-engine').value;
 
     if (!url) {
         alert('Please enter a LinkedIn profile URL.');
@@ -1232,39 +1257,97 @@ function handleAgentGenerate(e) {
     // Extracted target name
     const extractedName = extractNameFromLinkedInUrl(url);
 
-    // Simulated Agent Steps and Timing
-    const steps = [
-        { text: `🔍 Initiating secure connection agent logic for target: ${url}`, type: 'muted', delay: 100 },
-        { text: `👤 Extracting identity... Detected name: <strong>${extractedName}</strong>`, type: 'working', delay: 800 },
-        { text: `🧠 Parsing profile metadata & semantic context: "${profileText ? profileText.slice(0, 45) + '...' : 'None provided'}"`, type: 'muted', delay: 1600 },
-        { text: `🎯 Selected strategy: <strong>${strategy.toUpperCase()}</strong> (Max limit: ${limit} chars)`, type: 'working', delay: 2400 },
-        { text: `📝 Formatting custom connection templates for ${getCleanFirstName(extractedName)}...`, type: 'muted', delay: 3000 },
-        { text: `✅ Note generation complete! Validated under ${limit} character constraint.`, type: 'success', delay: 3600 }
-    ];
+    const addConsoleLine = (text, type) => {
+        const line = document.createElement('div');
+        line.className = `console-line ${type}`;
+        line.innerHTML = `<i class="fa-solid fa-angle-right"></i> ${text}`;
+        consoleBox.appendChild(line);
+        consoleBox.scrollTop = consoleBox.scrollHeight;
+    };
 
-    steps.forEach(step => {
+    if (engine === 'simulated') {
+        // Simulated Agent Steps and Timing
+        const steps = [
+            { text: `🔍 Initiating secure connection agent logic for target: ${url}`, type: 'muted', delay: 100 },
+            { text: `👤 Extracting identity... Detected name: <strong>${extractedName}</strong>`, type: 'working', delay: 800 },
+            { text: `🧠 Parsing profile copy and context: "${profileText ? profileText.slice(0, 45) + '...' : 'None provided'}"`, type: 'muted', delay: 1600 },
+            { text: `🎯 Selected strategy: <strong>${strategy.toUpperCase()}</strong> (Max limit: ${limit} chars)`, type: 'working', delay: 2400 },
+            { text: `📝 Formatting custom connection templates for ${getCleanFirstName(extractedName)}...`, type: 'muted', delay: 3000 },
+            { text: `✅ Note generation complete! Validated under ${limit} character constraint.`, type: 'success', delay: 3600 }
+        ];
+
+        steps.forEach(step => {
+            setTimeout(() => {
+                addConsoleLine(step.text, step.type);
+
+                // When the last step finishes, render cards
+                if (step.type === 'success') {
+                    statusTag.textContent = 'Complete';
+                    statusTag.style.color = '#34d399';
+                    const options = generateCustomNotes(extractedName, strategy, profileText, limit);
+                    renderAgentOutput(options, limit);
+                }
+            }, step.delay);
+        });
+    } else {
+        // Live Claude Sonnet Mode
+        addConsoleLine(`🔍 Initiating secure connection agent logic for target: ${url}`, 'muted');
+        
         setTimeout(() => {
-            const line = document.createElement('div');
-            line.className = `console-line ${step.type}`;
-            line.innerHTML = `<i class="fa-solid fa-angle-right"></i> ${step.text}`;
-            consoleBox.appendChild(line);
-            consoleBox.scrollTop = consoleBox.scrollHeight;
+            addConsoleLine(`👤 Extracting identity... Detected name: <strong>${extractedName}</strong>`, 'working');
+        }, 500);
 
-            // When the last step finishes, render cards
-            if (step.type === 'success') {
+        setTimeout(() => {
+            addConsoleLine(`🧠 Preparing Claude Sonnet prompt for strategy: <strong>${strategy.toUpperCase()}</strong>`, 'muted');
+        }, 1000);
+
+        setTimeout(() => {
+            addConsoleLine(`📡 Dispatching API request to Vercel Claude proxy...`, 'working');
+            
+            const isLocalFile = window.location.protocol === 'file:';
+            const apiBase = isLocalFile ? 'https://smm-master-dashboard.vercel.app' : '';
+            const apiUrl = `${apiBase}/api/generate-outreach`;
+            
+            const apiKey = document.getElementById('agent-api-key')?.value.trim() || '';
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: extractedName,
+                    strategy,
+                    profileText,
+                    limit,
+                    apiKey
+                })
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error || `HTTP error ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(options => {
+                addConsoleLine(`✅ Claude Note generation complete! Validated under ${limit} character constraint.`, 'success');
                 statusTag.textContent = 'Complete';
                 statusTag.style.color = '#34d399';
-                renderAgentOutput(extractedName, strategy, profileText, limit);
-            }
-        }, step.delay);
-    });
+                renderAgentOutput(options, limit);
+            })
+            .catch(err => {
+                addConsoleLine(`❌ Error calling Claude Sonnet: ${err.message}`, 'error');
+                statusTag.textContent = 'Error';
+                statusTag.style.color = '#ef4444';
+            });
+        }, 1500);
+    }
 }
 
 // Render generated note output cards
-function renderAgentOutput(name, strategy, profileText, limit) {
+function renderAgentOutput(options, limit) {
     const resultsContainer = document.getElementById('agent-results-container');
-    const options = generateCustomNotes(name, strategy, profileText, limit);
-
     resultsContainer.innerHTML = '';
     
     options.forEach((opt, idx) => {
