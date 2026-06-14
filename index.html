@@ -449,15 +449,16 @@
                                 <label for="agent-engine">Outreach Engine</label>
                                 <select id="agent-engine" class="form-control" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
                                     <option value="simulated">Local Simulated (Heuristics)</option>
-                                    <option value="claude" selected>Claude Sonnet (Live AI)</option>
+                                    <option value="claude">Claude 3.5 Sonnet (Anthropic)</option>
+                                    <option value="gemini" selected>Gemini 1.5 Flash (Google AI - Free Tier!)</option>
                                 </select>
                             </div>
 
                             <div class="form-group" id="agent-api-key-group">
-                                <label for="agent-api-key">Anthropic API Key</label>
-                                <input type="password" id="agent-api-key" class="form-control" placeholder="sk-ant-api03-..." style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
-                                <span style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; line-height: 1.3;">
-                                    Optional if ANTHROPIC_API_KEY is configured in your Vercel Environment Variables. Saved locally.
+                                <label id="agent-key-label" for="agent-api-key">Gemini API Key</label>
+                                <input type="password" id="agent-api-key" class="form-control" placeholder="AIzaSy..." style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px 14px;">
+                                <span id="agent-key-help" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; line-height: 1.3;">
+                                    Get a free key from Google AI Studio. Optional if GEMINI_API_KEY is configured on Vercel.
                                 </span>
                             </div>
 

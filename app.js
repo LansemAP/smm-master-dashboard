@@ -307,28 +307,51 @@ function setupEventListeners() {
         agentForm.addEventListener('submit', handleAgentGenerate);
     }
 
-    // Pre-load saved API Key if any
+    // Toggle API Key input group and labels based on engine selection
     const apiKeyInput = document.getElementById('agent-api-key');
-    if (apiKeyInput) {
-        apiKeyInput.value = localStorage.getItem('smm_anthropic_api_key') || '';
-        apiKeyInput.addEventListener('input', (e) => {
-            localStorage.setItem('smm_anthropic_api_key', e.target.value.trim());
-        });
-    }
-
-    // Toggle API Key input group based on engine selection
     const engineSelect = document.getElementById('agent-engine');
     const apiKeyGroup = document.getElementById('agent-api-key-group');
+    const keyLabel = document.getElementById('agent-key-label');
+    const keyHelp = document.getElementById('agent-key-help');
+
     if (engineSelect && apiKeyGroup) {
         const toggleApiKeyVisibility = () => {
-            if (engineSelect.value === 'simulated') {
+            const val = engineSelect.value;
+            if (val === 'simulated') {
                 apiKeyGroup.style.display = 'none';
             } else {
                 apiKeyGroup.style.display = 'flex';
+                if (val === 'claude') {
+                    if (keyLabel) keyLabel.textContent = 'Anthropic API Key';
+                    if (apiKeyInput) {
+                        apiKeyInput.placeholder = 'sk-ant-api03-...';
+                        apiKeyInput.value = localStorage.getItem('smm_anthropic_api_key') || '';
+                    }
+                    if (keyHelp) keyHelp.textContent = 'Optional if ANTHROPIC_API_KEY is configured in your Vercel Environment Variables. Saved locally.';
+                } else if (val === 'gemini') {
+                    if (keyLabel) keyLabel.textContent = 'Gemini API Key';
+                    if (apiKeyInput) {
+                        apiKeyInput.placeholder = 'AIzaSy...';
+                        apiKeyInput.value = localStorage.getItem('smm_gemini_api_key') || '';
+                    }
+                    if (keyHelp) keyHelp.textContent = 'Get a free key from Google AI Studio. Optional if GEMINI_API_KEY is configured on Vercel. Saved locally.';
+                }
             }
         };
+
         engineSelect.addEventListener('change', toggleApiKeyVisibility);
         toggleApiKeyVisibility(); // Trigger initial state
+
+        if (apiKeyInput) {
+            apiKeyInput.addEventListener('input', (e) => {
+                const val = engineSelect.value;
+                if (val === 'claude') {
+                    localStorage.setItem('smm_anthropic_api_key', e.target.value.trim());
+                } else if (val === 'gemini') {
+                    localStorage.setItem('smm_gemini_api_key', e.target.value.trim());
+                }
+            });
+        }
     }
 
     // Post edit form submission
@@ -1290,7 +1313,11 @@ function handleAgentGenerate(e) {
             }, step.delay);
         });
     } else {
-        // Live Claude Sonnet Mode
+        // Live AI Mode (Claude or Gemini)
+        const isGemini = engine === 'gemini';
+        const engineName = isGemini ? 'Gemini 1.5 Flash' : 'Claude Sonnet';
+        const proxyName = isGemini ? 'Gemini' : 'Claude';
+
         addConsoleLine(`🔍 Initiating secure connection agent logic for target: ${url}`, 'muted');
         
         setTimeout(() => {
@@ -1298,11 +1325,11 @@ function handleAgentGenerate(e) {
         }, 500);
 
         setTimeout(() => {
-            addConsoleLine(`🧠 Preparing Claude Sonnet prompt for strategy: <strong>${strategy.toUpperCase()}</strong>`, 'muted');
+            addConsoleLine(`🧠 Preparing ${engineName} prompt for strategy: <strong>${strategy.toUpperCase()}</strong>`, 'muted');
         }, 1000);
 
         setTimeout(() => {
-            addConsoleLine(`📡 Dispatching API request to Vercel Claude proxy...`, 'working');
+            addConsoleLine(`📡 Dispatching API request to Vercel ${proxyName} proxy...`, 'working');
             
             const isLocalFile = window.location.protocol === 'file:';
             const apiBase = isLocalFile ? 'https://smm-master-dashboard.vercel.app' : '';
@@ -1320,7 +1347,8 @@ function handleAgentGenerate(e) {
                     strategy,
                     profileText,
                     limit,
-                    apiKey
+                    apiKey,
+                    engine
                 })
             })
             .then(async response => {
@@ -1331,13 +1359,13 @@ function handleAgentGenerate(e) {
                 return response.json();
             })
             .then(options => {
-                addConsoleLine(`✅ Claude Note generation complete! Validated under ${limit} character constraint.`, 'success');
+                addConsoleLine(`✅ ${proxyName} Note generation complete! Validated under ${limit} character constraint.`, 'success');
                 statusTag.textContent = 'Complete';
                 statusTag.style.color = '#34d399';
                 renderAgentOutput(options, limit);
             })
             .catch(err => {
-                addConsoleLine(`❌ Error calling Claude Sonnet: ${err.message}`, 'error');
+                addConsoleLine(`❌ Error calling ${engineName}: ${err.message}`, 'error');
                 statusTag.textContent = 'Error';
                 statusTag.style.color = '#ef4444';
             });
