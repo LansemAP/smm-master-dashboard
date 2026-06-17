@@ -632,6 +632,12 @@
                         </div>
                     </div>
 
+                    <!-- Grounding Mode Warning Banner -->
+                    <div id="trends-warning-banner" style="display: none; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 0.78rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); color: #f59e0b; line-height: 1.4;">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 0.9rem; flex-shrink: 0;"></i>
+                        <span><strong>Using Offline fallback mode.</strong> Real-time Google Search grounding is not available on Gemini free-tier keys. To enable live trends, transition your API key in Google AI Studio to the <strong>Pay-As-You-Go</strong> billing tier (which includes 5,000 free search queries/month).</span>
+                    </div>
+
                     <div class="trends-layout">
                         <!-- Left Panel: Trending Hashtags -->
                         <div class="hashtag-panel" style="display: flex; flex-direction: column; gap: 16px; border-right: 1px solid var(--border-color); padding-right: 20px;">

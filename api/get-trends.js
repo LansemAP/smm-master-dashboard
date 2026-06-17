@@ -69,7 +69,7 @@ Output format:
   ]
 }`;
 
-        const response = await fetch(geminiUrl, {
+        let response = await fetch(geminiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -86,15 +86,52 @@ Output format:
             })
         });
 
+        let isGrounded = true;
+        let data;
+
         if (!response.ok) {
             const errText = await response.text();
-            res.status(response.status).json({ 
-                error: `Gemini API error: ${errText}` 
-            });
-            return;
+            
+            // Check if it's a quota / rate limit or grounding restriction on the free tier (limit: 0)
+            if (response.status === 429 || errText.includes('Quota exceeded') || errText.includes('free_tier') || errText.includes('RESOURCE_EXHAUSTED')) {
+                console.warn('Google Search Grounding not available or quota limit hit on Gemini Free Tier. Retrying without search tools...');
+                isGrounded = false;
+                
+                const fallbackPrompt = promptText + "\n\nNOTE: You do not have access to real-time search grounding for this fallback attempt, so please generate highly realistic, contemporary-looking trending posts and hashtags based on your knowledge base.";
+                
+                const fallbackResponse = await fetch(geminiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: fallbackPrompt
+                            }]
+                        }]
+                    })
+                });
+
+                if (!fallbackResponse.ok) {
+                    const fallbackErrText = await fallbackResponse.text();
+                    res.status(fallbackResponse.status).json({ 
+                        error: `Gemini API error (fallback): ${fallbackErrText}` 
+                    });
+                    return;
+                }
+                
+                data = await fallbackResponse.json();
+            } else {
+                res.status(response.status).json({ 
+                    error: `Gemini API error: ${errText}` 
+                });
+                return;
+            }
+        } else {
+            data = await response.json();
         }
 
-        const data = await response.json();
         let contentText = '';
         if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
             contentText = data.candidates[0].content.parts[0].text.trim();
@@ -117,6 +154,7 @@ Output format:
 
         try {
             const trends = JSON.parse(cleanText);
+            trends.isGrounded = isGrounded;
             res.status(200).json(trends);
         } catch (parseError) {
             console.error('Failed to parse Gemini trends response:', contentText);

@@ -2251,10 +2251,24 @@ function fetchRealTimeTrends(forceReload = false) {
             setTimeout(() => { overlay.style.display = 'none'; }, 300);
         }
 
+        // Show/hide warning banner based on grounding status
+        const warningBanner = document.getElementById('trends-warning-banner');
+        if (warningBanner) {
+            if (data.isGrounded === false) {
+                warningBanner.style.display = 'flex';
+            } else {
+                warningBanner.style.display = 'none';
+            }
+        }
+
         // Update sync time
         if (syncTimeText) {
             const now = new Date();
-            syncTimeText.textContent = `Synced: ${now.toLocaleTimeString()}`;
+            if (data.isGrounded === false) {
+                syncTimeText.textContent = `Synced (Offline): ${now.toLocaleTimeString()}`;
+            } else {
+                syncTimeText.textContent = `Synced: ${now.toLocaleTimeString()}`;
+            }
         }
 
         // Render both views
@@ -2263,6 +2277,10 @@ function fetchRealTimeTrends(forceReload = false) {
     })
     .catch(err => {
         console.error("Error loading trends:", err);
+        const warningBanner = document.getElementById('trends-warning-banner');
+        if (warningBanner) {
+            warningBanner.style.display = 'none';
+        }
         if (loadingText) {
             loadingText.innerHTML = `<span style="color: #ef4444;">Error fetching trends: ${err.message}</span><br>
             <button class="btn-primary" onclick="fetchRealTimeTrends(true)" style="margin-top:12px; font-size:0.75rem; padding:6px 12px; cursor:pointer;">Retry</button>`;
