@@ -2237,8 +2237,8 @@ function fetchRealTimeTrends(forceReload = false) {
     })
     .then(async response => {
         if (!response.ok) {
-            const errText = await response.text();
-            throw new Error(errText || `HTTP status ${response.status}`);
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error || `HTTP status ${response.status}`);
         }
         return response.json();
     })
