@@ -1,4 +1,4 @@
-const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1/models';
+const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 module.exports = async (req, res) => {
     // Enable CORS for localhost and local files (e.g. file://)
@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
             return;
         }
 
-        const geminiUrl = `${GEMINI_API_BASE}/gemini-1.5-flash:generateContent?key=${finalApiKey}`;
+        const geminiUrl = `${GEMINI_API_BASE}/gemini-2.0-flash:generateContent?key=${finalApiKey}`;
         
         const promptText = `Perform a real-time search on Google to find the top 20 trending, viral, or highly engaging professional/business social media posts (e.g., from LinkedIn or Twitter/X) in India from the last 48 hours. Focus on real current topics: business, start-ups, AI technology, corporate culture, notice periods, IT sector, or economic shifts.
 
