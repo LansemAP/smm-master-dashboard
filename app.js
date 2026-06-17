@@ -4,8 +4,11 @@
 
 // Global state
 let currentBrand = 'master'; // 'master', 'corely', 'suriosity', 'lansem'
-let currentTab = 'dashboard'; // 'dashboard', 'accounts', 'scheduler', 'guidelines', 'library', 'agent'
+let currentTab = 'dashboard'; // active tab name
 let libActivePill = 'all'; // active category pill filter in Post Library
+let latestTrendsData = null; // store real-time fetched India trends
+let currentHashtagTime = '24h'; // active hashtag time range filter
+let currentMediaFilter = 'all'; // active post media filter
 
 // Brand Information Database
 const BRANDS_DB = {
@@ -254,21 +257,29 @@ How is your brand balancing direct-sourcing ethics with global pricing pressures
 #SuriosityAgri #MilletExports #SustainableAgri #Agribusiness`, 
         category: 'sourcing', 
         status: 'to-view' 
+    },
+    {
+        id: 8,
+        brand: 'suriosity',
+        platforms: ['linkedin'],
+        content: `The food importers who locked in Indian millet supply chains in 2023 are sitting on some of the most profitable commodity positions in the natural food space right now.\n\nHere's the business case that most people are still sleeping on.\n\n📈 Indian Bajra / Ragi can be sourced FOB Indian port at USD 280–420 per MT.\nThe same grain, certified organic and repackaged for EU health retail, sells at USD 1,200–2,800 per MT.\nThat's a 3x–6x gross margin opportunity.\n\n🌍 The UN's International Year of Millets 2023 triggered active procurement policies in multiple national governments. The EU Farm-to-Fork strategy explicitly names millets as a food security priority through 2027. This is policy-backed demand, not a trend.\n\n✅ APEDA-registered exporters now offer phytosanitary certificates, COA, EU MRL-compliant pesticide testing, and aflatoxin <4 ppb as standard.\n\n⚠️ The competitive window is narrowing. Forward-looking importers in Germany, Netherlands, and UAE have already signed annual supply contracts. Early movers in organic Ragi, Foxtail, and Barnyard Millet are seeing the clearest arbitrage right now.\n\nIndia's millet export value crossed USD 75 million in FY 2022–23 — a ~20% jump YoY. And that number represents only a fraction of what organised export channels can ship at full capacity.\n\nAre you already sourcing millets from India, or is this a gap in your current portfolio?\n\n📩 DM us or email export@suriosity.com to request our product catalogue, certifications, and MOQ schedule.\n\n#MilletImports #IndianAgriculture #FoodExports #SuriosityAgri #AgriBusiness #APEDA #FoodSecurity #ImportOpportunity`,
+        category: 'market-insights',
+        status: 'to-view'
     }
 ];
  
 // Local Storage Manager for Scheduled Posts
 function getScheduledPosts() {
-    const stored = localStorage.getItem('master_scheduled_posts_v4');
+    const stored = localStorage.getItem('master_scheduled_posts_v5');
     if (!stored) {
-        localStorage.setItem('master_scheduled_posts_v4', JSON.stringify(DEFAULT_POSTS));
+        localStorage.setItem('master_scheduled_posts_v5', JSON.stringify(DEFAULT_POSTS));
         return DEFAULT_POSTS;
     }
     return JSON.parse(stored);
 }
  
 function saveScheduledPosts(posts) {
-    localStorage.setItem('master_scheduled_posts_v4', JSON.stringify(posts));
+    localStorage.setItem('master_scheduled_posts_v5', JSON.stringify(posts));
 }
 
 // App Initialization
@@ -420,6 +431,86 @@ function setupEventListeners() {
     // Post Library: search input
     const libSearch = document.getElementById('library-search');
     if (libSearch) libSearch.addEventListener('input', () => renderLibraryView());
+
+    // Engagement Optimizer events
+    const optContent = document.getElementById('opt-post-content');
+    if (optContent) {
+        optContent.addEventListener('input', analyzeDraftPost);
+    }
+
+    const optClear = document.getElementById('opt-clear-btn');
+    if (optClear) {
+        optClear.addEventListener('click', () => {
+            optContent.value = '';
+            analyzeDraftPost();
+        });
+    }
+
+    const optSave = document.getElementById('opt-save-btn');
+    if (optSave) {
+        optSave.addEventListener('click', saveDraftToScheduler);
+    }
+
+    // Playbook tabs
+    document.querySelectorAll('.playbook-tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const targetTab = e.currentTarget.dataset.tab;
+            document.querySelectorAll('.playbook-tab-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === targetTab);
+                b.style.background = b.dataset.tab === targetTab ? 'rgba(var(--accent-rgb), 0.1)' : 'transparent';
+                b.style.borderColor = b.dataset.tab === targetTab ? 'var(--accent)' : 'transparent';
+                b.style.color = b.dataset.tab === targetTab ? 'var(--accent)' : 'var(--text-secondary)';
+            });
+
+            document.querySelectorAll('.playbook-section').forEach(sec => {
+                if (sec.id === targetTab) {
+                    sec.style.display = 'block';
+                    sec.classList.add('active');
+                } else {
+                    sec.style.display = 'none';
+                    sec.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    // India Trends Tracker events
+    const refreshBtn = document.getElementById('trends-refresh-btn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            fetchRealTimeTrends(true);
+        });
+    }
+
+    // Hashtag time range filter switching
+    document.querySelectorAll('.hash-time-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            currentHashtagTime = e.currentTarget.dataset.time;
+            document.querySelectorAll('.hash-time-btn').forEach(b => {
+                b.classList.toggle('active', b === e.currentTarget);
+                // Sync inline styling for active button state
+                if (b === e.currentTarget) {
+                    b.style.borderColor = 'var(--border-color)';
+                    b.style.background = 'rgba(255,255,255,0.05)';
+                    b.style.color = 'var(--text-primary)';
+                } else {
+                    b.style.borderColor = 'transparent';
+                    b.style.background = 'transparent';
+                    b.style.color = 'var(--text-secondary)';
+                }
+            });
+            renderTrendsHashtags();
+        });
+    });
+
+    // Media filter dropdown change
+    const mediaFilterSelect = document.getElementById('trend-media-filter');
+    if (mediaFilterSelect) {
+        mediaFilterSelect.addEventListener('change', (e) => {
+            currentMediaFilter = e.target.value;
+            renderViralPosts();
+        });
+    }
 }
 
 // Switch between active brands
@@ -517,6 +608,8 @@ function renderAll() {
         renderLibraryView();
     } else if (currentTab === 'agent') {
         renderAgentView();
+    } else if (currentTab === 'engagement') {
+        renderEngagementView();
     }
 }
 
@@ -1331,8 +1424,10 @@ function handleAgentGenerate(e) {
         setTimeout(() => {
             addConsoleLine(`📡 Dispatching API request to Vercel ${proxyName} proxy...`, 'working');
             
-            const isLocalFile = window.location.protocol === 'file:';
-            const apiBase = isLocalFile ? 'https://smm-master-dashboard.vercel.app' : '';
+            const isLocalStatic = window.location.protocol === 'file:' || 
+                                  (window.location.hostname === 'localhost' && window.location.port !== '3000') ||
+                                  (window.location.hostname === '127.0.0.1' && window.location.port !== '3000');
+            const apiBase = isLocalStatic ? 'https://smm-master-dashboard.vercel.app' : '';
             const apiUrl = `${apiBase}/api/generate-outreach`;
             
             const apiKey = document.getElementById('agent-api-key')?.value.trim() || '';
@@ -1414,7 +1509,7 @@ function renderAgentOutput(options, limit) {
 // POST LIBRARY — CATEGORY & POST MANAGER
 // =============================================
 
-const LIBRARY_POSTS_KEY = 'smm_library_posts_v1';
+const LIBRARY_POSTS_KEY = 'smm_library_posts_v2';
 
 const LIBRARY_DEFAULT_POSTS = [
     {
@@ -1436,6 +1531,26 @@ const LIBRARY_DEFAULT_POSTS = [
             { type: 'png', label: 'Slide 03 — Bajra Iron', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_03_bajra_iron.png' },
             { type: 'png', label: 'Slide 04 — IYM 2023', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_04_iym_2023.png' },
             { type: 'png', label: 'Slide 05 — 170 Lakh Tonnes', file: 'Suriosity/LinkedIn/assets/millet_global_impact/slide_05_170_lakh_tonnes.png' }
+        ]
+    },
+    {
+        id: 'lib-5',
+        brand: 'suriosity',
+        title: 'Why Importers Are Betting Big on Indian Millets',
+        category: 'market-insights',
+        platforms: ['linkedin'],
+        status: 'to-view',
+        createdAt: '2026-06-16',
+        tags: ['#MilletImports', '#IndianAgriculture', '#FoodExports', '#SuriosityAgri', '#AgriBusiness', '#APEDA', '#FoodSecurity', '#ImportOpportunity'],
+        slides: 5,
+        content: `The food importers who locked in Indian millet supply chains in 2023 are sitting on some of the most profitable commodity positions in the natural food space right now.\n\nFOB Price: USD 280–420/MT → EU Organic Retail: USD 1,200–2,800/MT → Gross margin: 3x–6x.\n\nGlobal millet market projected at USD 55+ Billion by 2030 (Grand View Research).\n\nIndia's millet export value was ~USD 64 million in FY22-23 (APEDA official) — and growing rapidly.\n\nAre you sourcing millets from India, or is this a gap in your portfolio?\n\n📩 DM or email export@suriosity.com`,
+        notes: 'Upload all 5 slides as a PDF. Target: food importers, commodity buyers, food brand procurement heads in EU/UK/UAE/USA. DM anyone who engages with the product catalogue.',
+        assets: [
+            { type: 'png', label: 'Slide 01 — Cover', file: 'Suriosity/LinkedIn/assets/millet_importer_opportunity/slide_01_cover.png' },
+            { type: 'png', label: 'Slide 02 — Market Size', file: 'Suriosity/LinkedIn/assets/millet_importer_opportunity/slide_02_market_size.png' },
+            { type: 'png', label: 'Slide 03 — Margin Story', file: 'Suriosity/LinkedIn/assets/millet_importer_opportunity/slide_03_margins.png' },
+            { type: 'png', label: 'Slide 04 — Compliance', file: 'Suriosity/LinkedIn/assets/millet_importer_opportunity/slide_04_compliance.png' },
+            { type: 'png', label: 'Slide 05 — CTA', file: 'Suriosity/LinkedIn/assets/millet_importer_opportunity/slide_05_cta.png' }
         ]
     },
     {
@@ -1735,3 +1850,517 @@ function closeLibraryPreview() {
     const modal = document.getElementById('lib-preview-modal');
     if (modal) modal.classList.remove('active');
 }
+
+// =============================================
+// ENGAGEMENT OPTIMIZER VIEW LOGIC
+// =============================================
+
+const PLAYBOOK_DB = {
+    master: {
+        hooks: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-lightbulb" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Contrarian (High Dwell):</strong> "Everyone tells you X. Here is why that's bad advice."</span></li>
+                <li><i class="fa-solid fa-chart-line" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Data-Driven:</strong> "I spent $10K on X and learned these 3 critical lessons."</span></li>
+                <li><i class="fa-solid fa-comments" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Story Opening:</strong> Start with a struggle: "Ramesh spent years trying to..."</span></li>
+            </ul>
+        `,
+        formatting: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-align-left" style="color: var(--accent); margin-right: 6px;"></i> <span>Keep paragraphs extremely short (1-2 sentences maximum).</span></li>
+                <li><i class="fa-solid fa-list-ul" style="color: var(--accent); margin-right: 6px;"></i> <span>Use numbered lists or bullet points to make stats stand out.</span></li>
+                <li><i class="fa-solid fa-eye" style="color: var(--accent); margin-right: 6px;"></i> <span>Insert generous line breaks to create "dwell-friendly" white space.</span></li>
+            </ul>
+        `,
+        algo: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-ban" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Link penalty:</strong> Do not put URLs in the body. Say "Link in comments".</span></li>
+                <li><i class="fa-solid fa-hashtag" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Hashtags:</strong> Use 3-5 tags. Place them at the very bottom.</span></li>
+                <li><i class="fa-solid fa-user-check" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Dwell Time:</strong> PDF carousels perform 5x better than basic text.</span></li>
+            </ul>
+        `
+    },
+    suriosity: {
+        hooks: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-seedling" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Agrarian/Direct:</strong> "Ramesh Gond spent 12 years watching middlemen take 40% of his Kodo Millet profits..."</span></li>
+                <li><i class="fa-solid fa-globe" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>B2B Exporter:</strong> "The food importers who locked in Indian millet supply chains are sitting on..."</span></li>
+                <li><i class="fa-solid fa-wheat-awn" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Product Focus:</strong> "Bajra moisture levels are charting a perfect 11-12% baseline. Here's why..."</span></li>
+            </ul>
+        `,
+        formatting: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-percent" style="color: var(--accent); margin-right: 6px;"></i> <span>Put logistics specs (moisture, pesticide MRLs) in bold/bullet list.</span></li>
+                <li><i class="fa-solid fa-anchor" style="color: var(--accent); margin-right: 6px;"></i> <span>Use clean sections: e.g. "The Problem", "The Solution", "The Impact".</span></li>
+            </ul>
+        `,
+        algo: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-tag" style="color: var(--accent); margin-right: 6px;"></i> <span>Tag APEDA and include keywords like "Millet Exports", "Agri Business".</span></li>
+                <li><i class="fa-solid fa-comments" style="color: var(--accent); margin-right: 6px;"></i> <span>Encourage replies from importers by asking about MOQ and catalogue requests.</span></li>
+            </ul>
+        `
+    },
+    corely: {
+        hooks: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-shirt" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Minimalist Aesthetic:</strong> "Sand, charcoal, and ivory. Designed to outlast trends."</span></li>
+                <li><i class="fa-solid fa-pen-nib" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Artisanal Focus:</strong> "Meet Rajesh. He manages our primary knitting house in Delhi..."</span></li>
+            </ul>
+        `,
+        formatting: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-leaf" style="color: var(--accent); margin-right: 6px;"></i> <span>Use earthy, restrained descriptions. Avoid overly promotional uppercase hype.</span></li>
+                <li><i class="fa-solid fa-scissors" style="color: var(--accent); margin-right: 6px;"></i> <span>Make listings clean and highlight premium fabric details (GOTS, GSM).</span></li>
+            </ul>
+        `,
+        algo: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-camera" style="color: var(--accent); margin-right: 6px;"></i> <span>Include hashtags like #CorelyOrganics, #SlowFashion, #MinimalistStyle.</span></li>
+                <li><i class="fa-solid fa-link" style="color: var(--accent); margin-right: 6px;"></i> <span>Keep links in bio; do not link directly in body captions.</span></li>
+            </ul>
+        `
+    },
+    lansem: {
+        hooks: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-triangle-exclamation" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Regulatory Alert:</strong> "Avoid late submission penalties. HMRC filing reminder."</span></li>
+                <li><i class="fa-solid fa-shield-halved" style="color: var(--accent); margin-right: 6px;"></i> <span><strong>Security Check:</strong> "How secure is your offshore accounting team?"</span></li>
+            </ul>
+        `,
+        formatting: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-pound-sign" style="color: var(--accent); margin-right: 6px;"></i> <span>Emphasize exact percentage savings (e.g. "Save up to 75% on overhead").</span></li>
+                <li><i class="fa-solid fa-laptop-code" style="color: var(--accent); margin-right: 6px;"></i> <span>Clearly state operational safety measures (GDPR compliance, VDI setups).</span></li>
+            </ul>
+        `,
+        algo: `
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                <li><i class="fa-solid fa-briefcase" style="color: var(--accent); margin-right: 6px;"></i> <span>Include UK-specific corporate hashtags like #UKAccounting, #LansemUK.</span></li>
+                <li><i class="fa-solid fa-user-plus" style="color: var(--accent); margin-right: 6px;"></i> <span>Invite direct messages (DM) for client capacity pilots.</span></li>
+            </ul>
+        `
+    }
+};
+
+function renderEngagementView() {
+    const brandPlaybook = PLAYBOOK_DB[currentBrand] || PLAYBOOK_DB.master;
+
+    // Populate dynamic playbook content
+    const hooksDiv = document.getElementById('playbook-hooks');
+    const formDiv = document.getElementById('playbook-formatting');
+    const algoDiv = document.getElementById('playbook-algo');
+
+    if (hooksDiv) hooksDiv.innerHTML = brandPlaybook.hooks;
+    if (formDiv) formDiv.innerHTML = brandPlaybook.formatting;
+    if (algoDiv) algoDiv.innerHTML = brandPlaybook.algo;
+
+    // Trigger analysis in case there's existing text in textarea
+    analyzeDraftPost();
+
+    // Trigger loading trends
+    fetchRealTimeTrends();
+}
+
+function updateCheckStatus(id, status, descText) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = `check-item ${status}`;
+    
+    const icon = el.querySelector('.check-status i');
+    if (icon) {
+        if (status === 'success') {
+            icon.className = 'fa-solid fa-circle-check';
+        } else if (status === 'warning') {
+            icon.className = 'fa-solid fa-triangle-exclamation';
+        } else if (status === 'error') {
+            icon.className = 'fa-solid fa-circle-xmark';
+        } else {
+            icon.className = 'fa-solid fa-circle-notch';
+        }
+    }
+    
+    const desc = el.querySelector('.check-desc');
+    if (desc && descText) {
+        desc.textContent = descText;
+    }
+}
+
+function analyzeDraftPost() {
+    const textEl = document.getElementById('opt-post-content');
+    if (!textEl) return;
+    
+    const text = textEl.value;
+    const charCount = text.length;
+    const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    
+    // Update count labels
+    const charCountEl = document.getElementById('opt-char-count');
+    const wordCountEl = document.getElementById('opt-word-count');
+    if (charCountEl) charCountEl.textContent = `${charCount} characters`;
+    if (wordCountEl) wordCountEl.textContent = `${wordCount} words`;
+
+    // Handle empty state
+    if (text.trim() === '') {
+        const scoreValEl = document.getElementById('opt-score-val');
+        const scoreLabelEl = document.getElementById('opt-score-label');
+        const indicator = document.getElementById('opt-score-indicator');
+
+        if (scoreValEl) scoreValEl.textContent = '0';
+        if (scoreLabelEl) scoreLabelEl.textContent = 'Write something to start the real-time evaluation.';
+        if (indicator) {
+            indicator.style.strokeDashoffset = '251.2';
+            indicator.style.stroke = 'var(--accent)';
+        }
+
+        updateCheckStatus('chk-hook', 'pending', 'Needs a strong opening line (e.g. data, story, or question).');
+        updateCheckStatus('chk-dwell', 'pending', 'Keep paragraphs under 2 sentences with clean line breaks.');
+        updateCheckStatus('chk-links', 'pending', 'Avoid external links in body; put them in comments instead.');
+        updateCheckStatus('chk-hashtags', 'pending', 'Aim for exactly 3 to 5 relevant hashtags.');
+        updateCheckStatus('chk-cta', 'pending', 'Ask a direct question at the end to prompt discussions.');
+        return;
+    }
+
+    let hookScore = 5;
+    let spacingScore = 5;
+    let linkScore = 25;
+    let hashtagScore = 0;
+    let ctaScore = 0;
+
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    const firstLine = lines[0] || '';
+
+    // 1. Hook Check
+    let hookDesc = 'Needs a stronger opening sentence under 200 chars.';
+    let hookStatus = 'error';
+    if (firstLine.length > 10 && firstLine.length <= 200) {
+        hookScore += 10;
+    }
+    if (/[0-9]/.test(firstLine)) {
+        hookScore += 5; // Has stats/numbers
+    }
+    if (firstLine.includes('?')) {
+        hookScore += 5; // Direct question hook
+    }
+    const triggers = ['how', 'why', 'spent', 'lost', 'learn', 'meet', 'hidden', 'opp', 'opportunities', 'bajra', 'ragi', 'millet', 'hmrc', 'secure', 'organics', 'sustainable', 'middlemen', 'agriculture', 'importers', 'profit'];
+    if (triggers.some(t => firstLine.toLowerCase().includes(t))) {
+        hookScore += 5; // Strong keywords detected
+    }
+    if (hookScore >= 20) {
+        hookStatus = 'success';
+        hookDesc = 'Excellent! Highly engaging hook under 200 characters.';
+    } else if (hookScore >= 10) {
+        hookStatus = 'warning';
+        hookDesc = 'Decent hook. Try adding numbers or starting with a question.';
+    }
+
+    // 2. Dwell Spacing Check
+    let spacingDesc = 'Dense paragraphs block readability. Add double line breaks.';
+    let spacingStatus = 'error';
+    const paragraphs = text.split(/\n\s*\n/).filter(Boolean);
+    const hasDoubleNewlines = text.includes('\n\n') || text.includes('\r\n\r\n');
+    const hasBullets = /[-*•\u2022]|\d\.\s/.test(text);
+
+    if (hasDoubleNewlines) {
+        spacingScore += 10;
+    }
+    if (hasBullets) {
+        spacingScore += 10;
+    }
+    
+    // Penalty if any paragraph is too long (> 3 sentences)
+    let tooDense = false;
+    paragraphs.forEach(p => {
+        const sentences = p.split(/[.!?]\s+/).filter(Boolean);
+        if (sentences.length > 2) {
+            tooDense = true;
+        }
+    });
+    if (!tooDense && paragraphs.length > 1) {
+        spacingScore += 5;
+    } else if (tooDense) {
+        spacingScore = Math.max(0, spacingScore - 5);
+    }
+
+    if (spacingScore >= 20) {
+        spacingStatus = 'success';
+        spacingDesc = 'Readability optimized! Spacious paragraphs and clear visual anchors.';
+    } else if (spacingScore >= 10) {
+        spacingStatus = 'warning';
+        spacingDesc = 'Readability is okay. Break down sentences into smaller lines.';
+    }
+
+    // 3. Link Penalty Check
+    let linkStatus = 'success';
+    let linkDesc = 'Perfect. No external links in body text (Reach penalty safe).';
+    if (/(https?:\/\/|www\.)[^\s]+/.test(text)) {
+        linkScore = 0;
+        linkStatus = 'error';
+        linkDesc = 'Warning: External links in body suppress reach by 50%+. Put link in comments.';
+    }
+
+    // 4. Hashtag Check
+    const hashtags = text.match(/#[a-zA-Z0-9_]+/g) || [];
+    const hashCount = hashtags.length;
+    let hashStatus = 'warning';
+    let hashDesc = 'No hashtags found. Add 3-5 tags to increase indexability.';
+    
+    if (hashCount >= 3 && hashCount <= 5) {
+        hashtagScore = 15;
+        hashStatus = 'success';
+        hashDesc = `Great hashtag count (${hashCount} tags). Reach is optimized.`;
+    } else if (hashCount > 5) {
+        hashtagScore = 5;
+        hashStatus = 'error';
+        hashDesc = `Too many hashtags (${hashCount}). LinkedIn flags this as spam. Limit to 3-5.`;
+    } else if (hashCount > 0) {
+        hashtagScore = 8;
+        hashStatus = 'warning';
+        hashDesc = `Only ${hashCount} hashtag${hashCount > 1 ? 's' : ''}. Add a few more (aim for 3-5).`;
+    }
+
+    // 5. Call To Action (CTA) Check
+    const last150 = text.slice(-150).toLowerCase();
+    const ctaTriggers = ['comment', 'agree', 'discuss', 'thoughts', 'dm us', 'dm ', 'email', 'catalog', 'catalogue', 'contact', '?', 'what is', 'how do', 'share'];
+    const hasCTA = ctaTriggers.some(t => last150.includes(t));
+    let ctaStatus = 'warning';
+    let ctaDesc = 'Missing a final CTA. Ask a question at the end to drive comments.';
+
+    if (hasCTA) {
+        ctaScore = 10;
+        ctaStatus = 'success';
+        ctaDesc = 'CTA detected! Prompting discussion in the comments boosts organic reach.';
+    }
+
+    // Dynamic Score Calculation
+    const totalScore = hookScore + spacingScore + linkScore + hashtagScore + ctaScore;
+    
+    // Update UI elements
+    const scoreValEl = document.getElementById('opt-score-val');
+    const scoreLabelEl = document.getElementById('opt-score-label');
+    const indicator = document.getElementById('opt-score-indicator');
+
+    if (scoreValEl) scoreValEl.textContent = totalScore.toString();
+    
+    let label = 'Low engagement potential. Review checklist details.';
+    let strokeColor = '#ef4444'; // Red
+    
+    if (totalScore >= 80) {
+        label = 'Excellent! Post is highly optimized for reach and comments.';
+        strokeColor = '#10b981'; // Green
+    } else if (totalScore >= 50) {
+        label = 'Good potential. Resolve warnings to unlock higher engagement.';
+        strokeColor = '#fbbf24'; // Yellow
+    }
+
+    if (scoreLabelEl) scoreLabelEl.textContent = label;
+    if (indicator) {
+        const dashOffset = 251.2 - (251.2 * totalScore) / 100;
+        indicator.style.strokeDashoffset = dashOffset.toString();
+        indicator.style.stroke = strokeColor;
+    }
+
+    // Update checklists
+    updateCheckStatus('chk-hook', hookStatus, hookDesc);
+    updateCheckStatus('chk-dwell', spacingStatus, spacingDesc);
+    updateCheckStatus('chk-links', linkStatus, linkDesc);
+    updateCheckStatus('chk-hashtags', hashStatus, hashDesc);
+    updateCheckStatus('chk-cta', ctaStatus, ctaDesc);
+}
+
+function saveDraftToScheduler() {
+    const textEl = document.getElementById('opt-post-content');
+    if (!textEl) return;
+    
+    const text = textEl.value.trim();
+    if (!text) {
+        alert('Cannot save empty post draft.');
+        return;
+    }
+
+    const posts = getScheduledPosts();
+    const newPost = {
+        id: Date.now(),
+        brand: currentBrand === 'master' ? 'suriosity' : currentBrand, // Default to suriosity if master brand active
+        platforms: ['linkedin'],
+        content: text,
+        category: 'thought-leadership',
+        status: 'idea'
+    };
+
+    posts.unshift(newPost);
+    saveScheduledPosts(posts);
+
+    alert('Success! Your optimized draft has been saved to the Content Board under Ideas/Drafts.');
+    switchTab('scheduler');
+}
+
+// =============================================
+// REAL-TIME INDIA TRENDS FETCHING & RENDERING
+// =============================================
+
+function fetchRealTimeTrends(forceReload = false) {
+    if (latestTrendsData && !forceReload) {
+        // Data already loaded, just render
+        renderTrendsHashtags();
+        renderViralPosts();
+        return;
+    }
+
+    const overlay = document.getElementById('trends-loading-overlay');
+    const loadingText = document.getElementById('trends-loading-text');
+    const syncTimeText = document.getElementById('trends-sync-time');
+
+    if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+    }
+    if (loadingText) {
+        loadingText.textContent = 'Fetching real-time trends from India...';
+    }
+
+    const isLocalStatic = window.location.protocol === 'file:' || 
+                          (window.location.hostname === 'localhost' && window.location.port !== '3000') ||
+                          (window.location.hostname === '127.0.0.1' && window.location.port !== '3000');
+    const apiBase = isLocalStatic ? 'https://smm-master-dashboard.vercel.app' : '';
+    const apiUrl = `${apiBase}/api/get-trends`;
+
+    const apiKey = localStorage.getItem('smm_gemini_api_key') || '';
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            apiKey: apiKey
+        })
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(errText || `HTTP status ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        latestTrendsData = data;
+        
+        // Hide loading
+        if (overlay) {
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        // Update sync time
+        if (syncTimeText) {
+            const now = new Date();
+            syncTimeText.textContent = `Synced: ${now.toLocaleTimeString()}`;
+        }
+
+        // Render both views
+        renderTrendsHashtags();
+        renderViralPosts();
+    })
+    .catch(err => {
+        console.error("Error loading trends:", err);
+        if (loadingText) {
+            loadingText.innerHTML = `<span style="color: #ef4444;">Error fetching trends: ${err.message}</span><br>
+            <button class="btn-primary" onclick="fetchRealTimeTrends(true)" style="margin-top:12px; font-size:0.75rem; padding:6px 12px; cursor:pointer;">Retry</button>`;
+        }
+        if (syncTimeText) {
+            syncTimeText.textContent = 'Sync Failed';
+        }
+    });
+}
+
+function renderTrendsHashtags() {
+    const listContainer = document.getElementById('trends-hashtags-list');
+    if (!listContainer || !latestTrendsData) return;
+
+    listContainer.innerHTML = '';
+    
+    // Choose list based on current timeframe
+    let tagsList = [];
+    if (currentHashtagTime === '24h') {
+        tagsList = latestTrendsData.hashtags24h || [];
+    } else if (currentHashtagTime === '48h') {
+        tagsList = latestTrendsData.hashtags48h || [];
+    } else {
+        tagsList = latestTrendsData.hashtags1w || [];
+    }
+
+    if (tagsList.length === 0) {
+        listContainer.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:20px;">No trending hashtags found.</div>';
+        return;
+    }
+
+    tagsList.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'hashtag-row-item';
+        
+        row.innerHTML = `
+            <span class="hashtag-name">${item.tag}</span>
+            <span class="hashtag-growth"><i class="fa-solid fa-arrow-trend-up"></i> ${item.growth}</span>
+        `;
+        listContainer.appendChild(row);
+    });
+}
+
+function renderViralPosts() {
+    const listContainer = document.getElementById('trends-posts-list');
+    if (!listContainer || !latestTrendsData) return;
+
+    listContainer.innerHTML = '';
+
+    let posts = latestTrendsData.posts || [];
+
+    // Filter by mediaType
+    if (currentMediaFilter !== 'all') {
+        posts = posts.filter(p => (p.mediaType || '').toLowerCase() === currentMediaFilter);
+    }
+
+    if (posts.length === 0) {
+        listContainer.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:20px;">No posts match this media format filter.</div>';
+        return;
+    }
+
+    posts.forEach(post => {
+        const item = document.createElement('div');
+        item.className = 'viral-post-item';
+
+        const formatLabel = post.mediaType.toUpperCase();
+        const formatClass = (post.mediaType || '').toLowerCase();
+
+        item.innerHTML = `
+            <div class="viral-post-header">
+                <h5 class="viral-post-topic">${post.topic}</h5>
+                <span class="viral-post-format-badge ${formatClass}">${formatLabel}</span>
+            </div>
+            <p class="viral-post-excerpt">${post.excerpt}</p>
+            <div class="viral-post-footer">
+                <div class="viral-post-metrics">
+                    <div class="viral-post-metric">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>${post.likes.toLocaleString()}</span>
+                    </div>
+                    <div class="viral-post-metric">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>${post.comments.toLocaleString()}</span>
+                    </div>
+                </div>
+                <div class="viral-post-metrics">
+                    <div class="viral-post-metric er" title="Estimated Engagement Rate">
+                        <i class="fa-solid fa-fire-flame-simple"></i>
+                        <span>${post.engagementRate}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        listContainer.appendChild(item);
+    });
+}
+
+// Expose trends fetcher to window scope for inline onclick retry triggers
+window.fetchRealTimeTrends = fetchRealTimeTrends;
+
+
