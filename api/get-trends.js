@@ -81,7 +81,7 @@ Output format:
                     }]
                 }],
                 tools: [{
-                    googleSearch: {}
+                    google_search: {}
                 }]
             })
         });
