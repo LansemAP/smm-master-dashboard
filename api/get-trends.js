@@ -19,7 +19,8 @@ module.exports = async (req, res) => {
 
     try {
         const { apiKey } = req.body || {};
-        const finalApiKey = apiKey || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+        const rawApiKey = apiKey || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+        const finalApiKey = rawApiKey ? rawApiKey.trim() : '';
 
         if (!finalApiKey) {
             res.status(400).json({ 

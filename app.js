@@ -2282,7 +2282,11 @@ function fetchRealTimeTrends(forceReload = false) {
             warningBanner.style.display = 'none';
         }
         if (loadingText) {
-            loadingText.innerHTML = `<span style="color: #ef4444;">Error fetching trends: ${err.message}</span><br>
+            let displayMsg = `Error fetching trends: ${err.message}`;
+            if (err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID')) {
+                displayMsg = `❌ <strong>Invalid Gemini API Key.</strong> Please go to the <a href="#" onclick="switchTab('agent'); return false;" style="color: var(--accent); text-decoration: underline; font-weight: 600;">Connection Agent</a> tab to input your correct Gemini API Key.`;
+            }
+            loadingText.innerHTML = `<span style="color: #ef4444; line-height: 1.4; display: inline-block; max-width: 90%;">${displayMsg}</span><br>
             <button class="btn-primary" onclick="fetchRealTimeTrends(true)" style="margin-top:12px; font-size:0.75rem; padding:6px 12px; cursor:pointer;">Retry</button>`;
         }
         if (syncTimeText) {
