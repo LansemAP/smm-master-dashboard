@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
 
         if (isGemini) {
             // Live Gemini API call with native Structured Outputs JSON schema
-            const geminiUrl = `${GEMINI_API_BASE}/gemini-1.5-flash:generateContent?key=${finalApiKey}`;
+            const geminiUrl = `${GEMINI_API_BASE}/gemini-2.0-flash:generateContent?key=${finalApiKey}`;
             
             const systemInstruction = `You are a professional B2B LinkedIn outreach copywriter. Your task is to write high-converting, personalized, non-salesy LinkedIn connection request notes for Arnab Pati (Global Owner at SMM Master).
 The target's name is ${name}.
