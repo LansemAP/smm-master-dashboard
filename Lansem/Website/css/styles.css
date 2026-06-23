@@ -177,9 +177,18 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1240px;
+    max-width: 1320px;
     margin: 0 auto;
     padding: 0 24px;
+}
+
+@media (min-width: 1201px) and (max-width: 1320px) {
+    .logo-area img {
+        height: 48px;
+    }
+    .nav-menu ul {
+        gap: 16px;
+    }
 }
 
 /* Logo Design */
@@ -203,15 +212,16 @@ img {
 .nav-menu ul {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 20px;
 }
 
 .nav-link {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.85);
     position: relative;
     padding: 6px 0;
+    white-space: nowrap;
 }
 
 .nav-link::after {
@@ -2633,16 +2643,8 @@ img {
     }
 }
 
-/* Mobile Layout (max-width: 768px) */
-@media (max-width: 768px) {
-    html {
-        font-size: 15px;
-    }
-    
-    .section-title {
-        font-size: 1.85rem;
-    }
-    
+/* Header & Navigation Mobile Breakpoint (max-width: 1200px) */
+@media (max-width: 1200px) {
     .main-header {
         padding: 14px 0;
         background-color: var(--primary-color);
@@ -2694,6 +2696,7 @@ img {
         width: 100%;
         padding: 8px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        white-space: normal;
     }
     
     .nav-link:hover, .nav-link.active {
@@ -2706,12 +2709,23 @@ img {
     }
     
     .header-cta {
-        display: none; /* Hide top CTA on mobile */
+        display: none; /* Hide top CTA on tablet/mobile */
     }
 
     .mobile-cta {
         display: block;
         width: 100%;
+    }
+}
+
+/* Mobile Layout (max-width: 768px) */
+@media (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+    
+    .section-title {
+        font-size: 1.85rem;
     }
     
     .hero-title {
