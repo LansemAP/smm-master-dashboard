@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        if (sessionStorage.getItem('preloaderShown') === 'true') {
+            document.write('<style>#preloader { display: none !important; } body.loading { overflow: visible !important; }</style>');
+        }
+        document.documentElement.classList.add('js-active');
+        setTimeout(function() {
+            if (!window.animationsInitialized) {
+                document.documentElement.classList.remove('js-active');
+                var preloader = document.getElementById('preloader');
+                if (preloader) preloader.style.display = 'none';
+                document.body.classList.remove('loading');
+                console.warn('Animations failed to initialize within timeout. Falling back to static layout.');
+            }
+        }, 8000);
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers at LANSEM | Join Our Remote-First Advisory Team</title>
+    <meta name="description" content="Explore career opportunities at LANSEM. We are hiring CA Intermediate, CA Finalist, and qualified Chartered Accountants for remote-first UK bookkeeping, tax, and compliance support roles.">
+    <link rel="canonical" href="https://www.lansem.in/careers.html">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css?v=1.0.9">
+</head>
+<body class="loading">
+
+    <!-- Premium Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <img src="assets/images/logo_white.png" alt="LANSEM Logo" class="preloader-logo">
+            <button id="preloaderEnterBtn" class="preloader-enter-btn">Enter Site</button>
+        </div>
+    </div>
+
+    <!-- Header / Sticky Navigation Bar -->
+    <header class="main-header" id="mainHeader">
+        <div class="header-container">
+            <a href="index.html" class="logo-area" id="logoLink">
+                <img id="logoImg" src="assets/images/logo_white.png" alt="LANSEM Logo">
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="accounting-services.html" class="nav-link">Accounting Services</a></li>
+                    <li><a href="legal-services.html" class="nav-link">Legal Services</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="careers.html" class="nav-link active">Careers</a></li>
+                    <li><a href="security-compliance.html" class="nav-link">Security & Compliance</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                    <li class="mobile-cta"><a href="mailto:contact@lansem.in" class="btn btn-primary" style="margin-top: 15px; width: 100%; text-align: center; justify-content: center;">Book a Free Consultation</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-cta">
+                <a href="mailto:contact@lansem.in" class="btn btn-primary">Book a Free Consultation</a>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        
+        <!-- Careers Hero Section -->
+        <section class="careers-hero">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="careers-hero-content">
+                    <span class="hero-tag" style="color: var(--gold-color);">Join Our Team</span>
+                    <h1 class="careers-hero-title">Work With Us</h1>
+                    <p class="careers-hero-subtitle">Fast-track your accounting career with high-value UK client engagements.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Careers Intro Section -->
+        <section class="section-padding" id="careers-intro">
+            <div class="container">
+                <div class="intro-grid">
+                    <div class="intro-content-left">
+                        <span class="section-tag">Who We Are</span>
+                        <h2 class="section-title">Grow Your Career with LANSEM</h2>
+                        <p class="intro-text">At LANSEM, we deliver premium legal and accounting support services exclusively for UK-based professional practices. We build elite teams of Chartered Accountants, ACCA certified professionals, and legal advisors who work on complex, high-value client portfolios.</p>
+                        <p class="intro-text"><strong>Why join us?</strong> We operate a remote-first, high-performance workspace where continuous learning is mandatory. You will be trained in international cloud systems, UK GAAP (FRS 102/105), VAT regulations, and global client reporting standards, giving you rare exposure and valuable expertise.</p>
+                        <p class="intro-text">If you are looking for structured career progression, competitive global compensation, and a team that values your technical capabilities, explore our open tiers below.</p>
+                    </div>
+                    
+                    <div class="intro-image-right">
+                        <div class="blob-background"></div>
+                        <div class="portrait-frame">
+                            <img src="assets/images/featured_meeting_discussion.png" alt="LANSEM Careers and Training Team">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section (The 8-Week Training Program) -->
+        <section class="section-padding" id="training-program" style="background-color: var(--bg-light); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Structured Transition</span>
+                    <h2 class="section-title">Our 8-Week Transition Program</h2>
+                    <p class="section-desc">We transition Indian CA finalists and professionals into UK-ready client delivery specialists through a dedicated onboarding bootcamp.</p>
+                </div>
+                
+                <div class="timeline-container">
+                    <!-- Node 1 -->
+                    <div class="timeline-node left">
+                        <div class="timeline-content">
+                            <span class="timeline-week">Weeks 1–2</span>
+                            <h3>UK Cloud Software Ecosystem</h3>
+                            <p>Master the user interfaces, bank feed matching rules, and automation systems used by UK small businesses.</p>
+                            <ul class="timeline-list">
+                                <li>Complete Xero Advisor Certification (Xero Central)</li>
+                                <li>Complete QuickBooks Online ProAdvisor Certification</li>
+                                <li>Practical training on Dext / Hubdoc and OCR categorization rules</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Node 2 -->
+                    <div class="timeline-node right">
+                        <div class="timeline-content">
+                            <span class="timeline-week">Weeks 3–4</span>
+                            <h3>UK VAT & CIS Regulations</h3>
+                            <p>Understand standard UK transactional taxes, reverse charge mechanisms, and construction industry withholdings.</p>
+                            <ul class="timeline-list">
+                                <li>VAT Schemes: Standard, Flat Rate, and Cash Accounting</li>
+                                <li>Making Tax Digital (MTD) digital audit trails</li>
+                                <li>Domestic Reverse Charge & Construction Industry Scheme (CIS) verification</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Node 3 -->
+                    <div class="timeline-node left">
+                        <div class="timeline-content">
+                            <span class="timeline-week">Weeks 5–6</span>
+                            <h3>UK Payroll & Pension Administration</h3>
+                            <p>Run compliant UK payroll cycles according to HMRC PAYE guidelines and pension enrolment rules.</p>
+                            <ul class="timeline-list">
+                                <li>HMRC PAYE Tax Codes (e.g. 1257L) & National Insurance (NIC Class 1)</li>
+                                <li>Pensions Auto-Enrolment & NEST Pension portal integration</li>
+                                <li>Real Time Information (RTI) submissions: FPS and EPS drafting</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Node 4 -->
+                    <div class="timeline-node right">
+                        <div class="timeline-content">
+                            <span class="timeline-week">Weeks 7–8</span>
+                            <h3>UK GAAP & Year-End Accounts</h3>
+                            <p>Draft year-end statutory financial statements for UK micro-entities and small businesses.</p>
+                            <ul class="timeline-list">
+                                <li>Micro-Entities Regime (FRS 105) disclosures & layout</li>
+                                <li>Small Entities Regime (FRS 102 Section 1A) mapping & journals</li>
+                                <li>Companies House and HMRC CT600 Corporation Tax mapping</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jobs Section -->
+        <section class="section-padding" id="open-roles">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Active Vacancies</span>
+                    <h2 class="section-title">Explore Active Tiers</h2>
+                    <p class="section-desc">We recruit across three capability tiers to support our growing UK client portfolios. Choose your profile to apply.</p>
+                </div>
+                
+                <div class="jobs-grid">
+                    <!-- Job 1 -->
+                    <div class="job-card">
+                        <span class="job-tier">Tier 1: Intermediate</span>
+                        <h3 class="job-title">Associate Analyst - Bookkeeping</h3>
+                        <div class="job-meta">
+                            <div class="job-meta-item">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>Remote (India)</span>
+                            </div>
+                            <div class="job-meta-item">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                <span>Full-Time</span>
+                            </div>
+                        </div>
+                        <p class="job-desc">Best for CA Intermediate / semi-qualified applicants who excel at data reconciliation, routine ledger maintenance, and high-volume data matching.</p>
+                        <div class="job-requirements">
+                            <h4 class="job-requirements-title">Out-of-the-box readiness:</h4>
+                            <ul class="job-requirements-list">
+                                <li>Ledger postings, bank matching</li>
+                                <li>Basic AP/AR invoicing flows</li>
+                                <li>ICAI Intermediate cleared</li>
+                            </ul>
+                        </div>
+                        <a href="#apply" class="btn btn-outline apply-trigger-btn" data-role="tier1">Apply Now</a>
+                    </div>
+                    
+                    <!-- Job 2 -->
+                    <div class="job-card popular">
+                        <span class="job-badge-popular">Optimal Profile</span>
+                        <span class="job-tier">Tier 2: CA Finalist</span>
+                        <h3 class="job-title">Associate Consultant - Accounting</h3>
+                        <div class="job-meta">
+                            <div class="job-meta-item">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>Remote (India)</span>
+                            </div>
+                            <div class="job-meta-item">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                <span>Full-Time</span>
+                            </div>
+                        </div>
+                        <p class="job-desc">For CA Finalists who have completed their 3-year ICAI articleship. You will own audit files, compile statutory accounts, and draft complex management reports.</p>
+                        <div class="job-requirements">
+                            <h4 class="job-requirements-title">Out-of-the-box readiness:</h4>
+                            <ul class="job-requirements-list">
+                                <li>Audit lead schedules & papers</li>
+                                <li>Advanced Excel / modeling</li>
+                                <li>Complete articleship (3 years)</li>
+                            </ul>
+                        </div>
+                        <a href="#apply" class="btn btn-primary apply-trigger-btn" data-role="tier2">Apply Now</a>
+                    </div>
+                    
+                    <!-- Job 3 -->
+                    <div class="job-card">
+                        <span class="job-tier">Tier 3: Chartered Accountant</span>
+                        <h3 class="job-title">Manager - Client Delivery</h3>
+                        <div class="job-meta">
+                            <div class="job-meta-item">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>Remote (India)</span>
+                            </div>
+                            <div class="job-meta-item">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                <span>Full-Time</span>
+                            </div>
+                        </div>
+                        <p class="job-desc">For fully qualified CAs ready to lead accounting teams, manage direct relations with UK firm directors, and oversee corporate tax / transfer pricing reviews.</p>
+                        <div class="job-requirements">
+                            <h4 class="job-requirements-title">Out-of-the-box readiness:</h4>
+                            <ul class="job-requirements-list">
+                                <li>Statutory file review & sign-off</li>
+                                <li>Transfer pricing cost-plus SLA</li>
+                                <li>Qualified ICAI CA (0-3 yrs exp)</li>
+                            </ul>
+                        </div>
+                        <a href="#apply" class="btn btn-outline apply-trigger-btn" data-role="tier3">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Application Form Section -->
+        <section class="section-padding apply-section" id="apply">
+            <div class="container">
+                <div class="apply-grid">
+                    <div class="apply-info-left">
+                        <span class="section-tag">Join Our Growth</span>
+                        <h2>Why Build Your Career With Us?</h2>
+                        <p class="intro-text" style="margin-bottom: 30px;">LANSEM is a high-skill operational advisory provider. We invest heavily in our team's continuous training, software access, and remote setup to ensure you deliver global-standard compliance work.</p>
+                        
+                        <div class="apply-benefit-item">
+                            <div class="apply-benefit-icon">🌐</div>
+                            <div class="apply-benefit-text">
+                                <h4>International Exposure</h4>
+                                <p>Work directly on clients in the United Kingdom, United States, and UAE, learning international accounting and compliance structures.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="apply-benefit-item">
+                            <div class="apply-benefit-icon">💻</div>
+                            <div class="apply-benefit-text">
+                                <h4>100% Remote-First</h4>
+                                <p>Work securely from any location in India via virtual desktops (AWS VDI WorkSpaces) with hardware provisions and connectivity support.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="apply-benefit-item">
+                            <div class="apply-benefit-icon">📈</div>
+                            <div class="apply-benefit-text">
+                                <h4>Mentorship & Growth</h4>
+                                <p>Receive hands-on training under senior Chartered Accountants and advisors, with scheduled increments and clear career growth structures.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="apply-form-container">
+                        <h3>Submit Your Application</h3>
+                        <p class="form-desc">Please complete the screening questionnaire below. Our team reviews all CA profiles within 48 hours.</p>
+                        
+                        <div id="careerFormSuccess" class="form-success-container hidden">
+                            <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <h3>Application Submitted!</h3>
+                            <p>Thank you for applying. We have successfully received your information, and our recruitment team will reach out to you via email within 48 hours to schedule a diagnostic Excel and technical review.</p>
+                            <button id="resetCareerFormBtn" class="btn btn-outline btn-sm">Apply for Another Position</button>
+                        </div>
+                        
+                        <form id="careerForm">
+                            <div class="form-group-grid">
+                                <div class="form-group">
+                                    <label for="careerName">Full Name</label>
+                                    <input type="text" id="careerName" required placeholder="Enter your full name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="careerEmail">Email Address</label>
+                                    <input type="email" id="careerEmail" required placeholder="e.g. name@domain.com">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group-grid">
+                                <div class="form-group">
+                                    <label for="careerPhone">Contact Number</label>
+                                    <input type="tel" id="careerPhone" required placeholder="10-digit mobile number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="careerTier">CA Qualification Tier</label>
+                                    <select id="careerTier" required>
+                                        <option value="">Select your tier...</option>
+                                        <option value="tier1">Tier 1: CA Intermediate / Semi-Qualified</option>
+                                        <option value="tier2">Tier 2: CA Finalist (Articleship Completed)</option>
+                                        <option value="tier3">Tier 3: CA Qualified (Chartered Accountant)</option>
+                                        <option value="other">Other Finance Profile</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group-grid">
+                                <div class="form-group">
+                                    <label for="careerArticleship">Articleship Status</label>
+                                    <select id="careerArticleship" required>
+                                        <option value="">Select articleship status...</option>
+                                        <option value="Completed">Completed (3 Years)</option>
+                                        <option value="In Progress">Currently In Progress</option>
+                                        <option value="Incomplete">Incomplete / Left Midway</option>
+                                        <option value="NA">Not Applicable (N/A)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="careerResume">Resume / Portfolio Link</label>
+                                    <input type="url" id="careerResume" required placeholder="Link to Google Drive / LinkedIn PDF">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="careerMessage">Describe your articleship audit/bookkeeping experience</label>
+                                <textarea id="careerMessage" required placeholder="Detail the accounting software you know and your ledger reconciling/audit experience..."></textarea>
+                            </div>
+                            
+                            <div class="form-group full-width" style="margin-bottom: 0;">
+                                <button class="btn btn-primary" type="submit">Submit My Application</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-logo-area">
+                    <img src="assets/images/logo_white.png" alt="LANSEM Logo">
+                    <p class="footer-desc">LANSEM delivers high-skill legal and accounting outsourcing for professional practices. Back-office support managed by experienced specialists.</p>
+                    <span class="footer-compliance-tag">Accurate • Compliant • Reliable • Global</span>
+                </div>
+                
+                <div class="footer-links-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links-list">
+                        <li><a class="footer-link-item" href="index.html#">Home</a></li>
+                        <li><a class="footer-link-item" href="accounting-services.html">Accounting Services</a></li>
+                        <li><a class="footer-link-item" href="legal-services.html">Legal Services</a></li>
+                        <li><a class="footer-link-item" href="about.html">About Us</a></li>
+                        <li><a class="footer-link-item" href="careers.html">Careers</a></li>
+                        <li><a class="footer-link-item" href="security-compliance.html">Security & Compliance</a></li>
+                        <li><a class="footer-link-item" href="index.html#faq">Frequently Asked Questions</a></li>
+                        <li><a class="footer-link-item" href="index.html#contact">Contact Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact-col">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-list">
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <span><a href="mailto:contact@lansem.in">contact@lansem.in</a></span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <span><a href="mailto:contact@lansem.in">contact@lansem.in</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Data Processing Agreement</a>
+                </div>
+                
+                <div class="footer-disclaimer">
+                    <strong>Disclaimer:</strong> LANSEM is not a law firm or registered audit practice and does not provide direct legal, financial, or audit advice. All work products, prep files, tax returns, and research are provided as back-office services strictly for review and sign-off by qualified solicitors or licensed practitioners representing our client firms.
+                </div>
+                
+                <div class="footer-copyright">
+                    &copy; 2026 LANSEM Legal and Accounting Advisors. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Consultation Widget -->
+    <div id="consultationWidget" class="floating-widget hidden">
+        <button id="closeWidgetBtn" class="close-widget-btn" aria-label="Dismiss">&times;</button>
+        <div class="widget-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        </div>
+        <div class="widget-content">
+            <h4>Start Your 15-Hour Free Pilot</h4>
+            <p>Expand your UK accounting capacity overnight. Discuss your requirements today.</p>
+            <a href="index.html#contact" id="widgetCTA" class="btn btn-primary btn-sm">Book Free Consultation</a>
+        </div>
+    </div>
+
+    <!-- GSAP Animations Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Custom Scripts -->
+    <script src="js/animations.js?v=1.0.8"></script>
+    <script src="js/main.js?v=1.0.1"></script>
+    
+    <!-- Careers Page Dynamic Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const triggerBtns = document.querySelectorAll('.apply-trigger-btn');
+            const tierSelect = document.getElementById('careerTier');
+            const applySection = document.getElementById('apply');
+            
+            triggerBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const role = btn.getAttribute('data-role');
+                    if (role && tierSelect) {
+                        tierSelect.value = role;
+                    }
+                    
+                    // Smooth scroll to application form
+                    if (applySection) {
+                        applySection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            const careerForm = document.getElementById('careerForm');
+            const successContainer = document.getElementById('careerFormSuccess');
+            const resetBtn = document.getElementById('resetCareerFormBtn');
+            
+            if (careerForm && successContainer) {
+                careerForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const submitBtn = careerForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerText;
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Submitting...';
+                    
+                    setTimeout(() => {
+                        careerForm.reset();
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                        careerForm.classList.add('hidden');
+                        successContainer.classList.remove('hidden');
+                    }, 1200);
+                });
+                
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', () => {
+                        successContainer.classList.add('hidden');
+                        careerForm.classList.remove('hidden');
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
