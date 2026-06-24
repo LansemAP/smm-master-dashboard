@@ -3820,7 +3820,7 @@ body.loading {
     width: 100%;
     overflow: hidden;
     background-color: var(--primary-color);
-    background-image: url('../assets/images/featured_meeting_discussion.png');
+    background-image: url('../assets/images/careers_collaboration.png');
     background-size: cover;
     background-position: center;
     display: flex;
