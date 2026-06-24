@@ -524,22 +524,57 @@
             const successContainer = document.getElementById('careerFormSuccess');
             const resetBtn = document.getElementById('resetCareerFormBtn');
             
+            const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzPuhfjYfR_KJhywi-JmwVm21aKoeMsRIM9oEJxM4arpUwA__cs5DQF9JUdLaUpdENJ/exec";
+            
             if (careerForm && successContainer) {
                 careerForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const submitBtn = careerForm.querySelector('button[type="submit"]');
                     const originalText = submitBtn.innerText;
                     
-                    submitBtn.disabled = true;
-                    submitBtn.innerText = 'Submitting...';
+                    const formData = {
+                        type: "career",
+                        name: document.getElementById('careerName').value,
+                        email: document.getElementById('careerEmail').value,
+                        phone: document.getElementById('careerPhone').value,
+                        tier: document.getElementById('careerTier').value,
+                        articleship: document.getElementById('careerArticleship').value,
+                        resume: document.getElementById('careerResume').value,
+                        message: document.getElementById('careerMessage').value
+                    };
                     
-                    setTimeout(() => {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Sending...';
+                    
+                    const formBody = [];
+                    for (const property in formData) {
+                        const encodedKey = encodeURIComponent(property);
+                        const encodedValue = encodeURIComponent(formData[property]);
+                        formBody.push(encodedKey + "=" + encodedValue);
+                    }
+                    const bodyStr = formBody.join("&");
+                    
+                    fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                        },
+                        mode: 'no-cors',
+                        body: bodyStr
+                    })
+                    .then(() => {
                         careerForm.reset();
                         submitBtn.disabled = false;
                         submitBtn.innerText = originalText;
                         careerForm.classList.add('hidden');
                         successContainer.classList.remove('hidden');
-                    }, 1200);
+                    })
+                    .catch(error => {
+                        console.error('Submission error:', error);
+                        alert('Something went wrong. Please try again or email us directly.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                    });
                 });
                 
                 if (resetBtn) {
