@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (formErrorMessage) formErrorMessage.classList.add('hidden');
 
             // Fallback simulation if webhook URL is not replaced yet
-            if (GOOGLE_SHEET_WEBHOOK_URL === "YOUR_GOOGLE_SCRIPT_WEB_APP_URL") {
+            if (GOOGLE_SHEET_WEBHOOK_URL === "https://script.google.com/macros/s/AKfycbzPuhfjYfR_KJhywi-JmwVm21aKoeMsRIM9oEJxM4arpUwA__cs5DQF9JUdLaUpdENJ/exec") {
                 console.warn("Google Sheet Webhook URL is not configured. Simulating submission...");
                 setTimeout(() => {
                     contactForm.reset();
@@ -312,4 +312,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 500); // match transition duration
         });
     }
-});
+});

@@ -231,6 +231,7 @@ function initAnimations() {
         '.industry-card',
         '.trust-item',
         '.vision-mission-card',
+        '.founder-message-left',
         '.specialist-box'
     ].join(', ');
 
@@ -257,6 +258,7 @@ function initAnimations() {
     const rightRevealSelector = [
         '.intro-image-right',
         '.contact-form-right',
+        '.founder-portrait',
         '.lansem-model'
     ].join(', ');
 
