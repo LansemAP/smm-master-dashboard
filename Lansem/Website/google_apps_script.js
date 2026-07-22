@@ -10,19 +10,28 @@
  * 6. Deploy, authorize permissions, copy the Web App URL, and paste it to GOOGLE_SHEET_WEBHOOK_URL.
  */
 
+function safeText(str) {
+  if (!str) return "";
+  str = String(str).trim();
+  if (str.startsWith("+") || str.startsWith("=") || str.startsWith("-")) {
+    return "'" + str;
+  }
+  return str;
+}
+
 function doPost(e) {
   try {
     var type = e.parameter.type || "lead";
     var timestamp = new Date();
     
     if (type === "career") {
-      var name = e.parameter.name || "";
-      var email = e.parameter.email || "";
-      var phone = e.parameter.phone || "";
-      var tier = e.parameter.tier || "";
-      var articleship = e.parameter.articleship || "";
-      var resume = e.parameter.resume || "";
-      var message = e.parameter.message || "";
+      var name = safeText(e.parameter.name || "");
+      var email = safeText(e.parameter.email || "");
+      var phone = safeText(e.parameter.phone || "");
+      var tier = safeText(e.parameter.tier || "");
+      var articleship = safeText(e.parameter.articleship || "");
+      var resume = safeText(e.parameter.resume || "");
+      var message = safeText(e.parameter.message || "");
       
       // Try to append to a "Careers" sheet if it exists, otherwise use/create it
       var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -58,14 +67,14 @@ function doPost(e) {
     } else {
       // Standard lead submission
       var sheet = SpreadsheetApp.getActiveSheet();
-      var name = e.parameter.name || "";
-      var email = e.parameter.email || "";
-      var firmName = e.parameter.firmName || "";
-      var country = e.parameter.country || "";
-      var firmType = e.parameter.firmType || "";
-      var services = e.parameter.services || "";
-      var message = e.parameter.message || "";
-      var source = e.parameter.source || "";
+      var name = safeText(e.parameter.name || "");
+      var email = safeText(e.parameter.email || "");
+      var firmName = safeText(e.parameter.firmName || "");
+      var country = safeText(e.parameter.country || "");
+      var firmType = safeText(e.parameter.firmType || "");
+      var services = safeText(e.parameter.services || "");
+      var message = safeText(e.parameter.message || "");
+      var source = safeText(e.parameter.source || "");
       
       sheet.appendRow([timestamp, name, email, firmName, country, firmType, services, message, source]);
       

@@ -532,11 +532,16 @@
                     const submitBtn = careerForm.querySelector('button[type="submit"]');
                     const originalText = submitBtn.innerText;
                     
+                    let rawPhone = document.getElementById('careerPhone').value || '';
+                    if (rawPhone && (rawPhone.trim().startsWith('+') || rawPhone.trim().startsWith('='))) {
+                        rawPhone = "'" + rawPhone.trim();
+                    }
+                    
                     const formData = {
                         type: "career",
                         name: document.getElementById('careerName').value,
                         email: document.getElementById('careerEmail').value,
-                        phone: document.getElementById('careerPhone').value,
+                        phone: rawPhone,
                         tier: document.getElementById('careerTier').value,
                         articleship: document.getElementById('careerArticleship').value,
                         resume: document.getElementById('careerResume').value,
